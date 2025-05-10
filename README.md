@@ -93,13 +93,13 @@ The data curation process was meticulously designed to transform raw ABO data in
     * The corresponding image was retrieved using the path obtained from `images.csv`.
     * This image, along with the relevant JSON object (excluding the `all_image_id` field), was then sent to the Gemini model via a carefully crafted prompt (detailed in "Prompt Engineering") to generate high-quality Q&A pairs.
 
-## Product Type Distribution Analysis
+## Product Type Distribution Analysis (All the 12 Parts are Provided Here (`/DataCuration/OriginalDataSumamry/Plots`))
 ![image](https://github.com/user-attachments/assets/c48cb497-5846-4f75-b556-9ec9453ad4ec)
 ![image](https://github.com/user-attachments/assets/0b309650-8194-4f88-b59b-c0898a1b3572)
 ![image](https://github.com/user-attachments/assets/1484554e-c6c0-456e-9e8c-8b2dfe51ecf3)
 ![image](https://github.com/user-attachments/assets/e99fbe82-f351-46c7-acf0-3761de4f2b52)
 
-The remaining Parts Graphs Can be accessed at /DataCuration/OriginalDataSummary/Plots
+Here we Have included the top 2 parts/groups and bottom 2 parts/groups,The remaining Parts/Group Graphs Can be accessed at The above mentioned Path
 Upon analyzing the distribution of the 147,702 product listings across the 576 product types, a severe class imbalance was observed.
 
 **Key Observations:**
@@ -146,7 +146,7 @@ This strategy creates a more balanced and diverse dataset, crucial for training 
 
 ## Prompt Engineering for VQA Generation
 
-The prompt, located in `/Data Curation/MainCode/Prompt.txt`, was meticulously crafted to generate high-quality question-answer pairs. Its primary objective was to ensure a comprehensive exploration of both visual content and product metadata, aiming to produce diverse, non-redundant, and detailed questions.
+The prompt, located in `/DataCuration/MainCode/Prompt.txt`, was meticulously crafted to generate high-quality question-answer pairs. Its primary objective was to ensure a comprehensive exploration of both visual content and product metadata, aiming to produce diverse, non-redundant, and detailed questions.
 
 **Key Considerations in Prompt Design:**
 
@@ -188,7 +188,7 @@ After thoroughly evaluating both models, we ultimately chose **Gemini** over **L
 
 To address Gemini's API limitations and efficiently scale the generation process while maintaining quality, we developed a novel API key management and error handling strategy, which is detailed in the subsequent section.
 
-## Implementation Details: The Code (`/Data Curation/MainCode/Final.py`)
+## Implementation Details: The Code (`/DataCuration/MainCode/Final.py`)
 
 Our robust implementation was designed to manage API calls efficiently, handle errors gracefully, and ensure the continuous generation of Q&A pairs for a large dataset.
 
@@ -214,7 +214,7 @@ Our robust implementation was designed to manage API calls efficiently, handle e
 ### Output Storage
 
 * The generated question-answer (QA) pairs are stored persistently in a separate directory, organized as individual `.json` files.
-* Each `.json` file is named after its corresponding `image_id` (e.g., `image_id_xxxx.json`).
+* Each `.json` file is named after its corresponding `image_id` 
 * Each file contains two key fields:
     * `image_path`: The relative path to the image file.
     * `qa_pairs`: A list of dictionaries, each representing a Q&A pair generated for that image.
@@ -223,6 +223,7 @@ This robust implementation strategy allowed us to navigate the complexities of A
 
 ## Results and Dataset Statistics
 ![image](https://github.com/user-attachments/assets/e1a829e4-cf1e-4cde-8efd-02ecd067ae72)
+
 We successfully generated question-and-answer (Q&A) pairs for **177,375 images**, distributed across **559 categories**.
 
 * **Category Reduction**: We observed a slight reduction in the total number of categories from the initial 576. This can be attributed to multiple `image_id`s potentially sharing the same `product_type` but not being sampled, or some categories being excluded by the sampling algorithm if their count was extremely low and they didn't meet the minimum threshold after processing.
@@ -234,6 +235,7 @@ The train-test split was a critical phase aimed at creating robust training and 
 
 **Threshold Determination:**
 ![image](https://github.com/user-attachments/assets/65a04115-ea6a-427b-a73b-f4cc0ac1bb4f)
+
 Upon analyzing the image distribution (as visually represented in the provided plots as well as the image showing classes with there respective number of images in it for less than 110), we observed a clear pattern indicating that categories with fewer than a certain number of images would not provide statistically significant evaluation. Consequently, we established a threshold of **20 images**.
 
 **Data Splitting Methodology:**
