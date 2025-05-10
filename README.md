@@ -94,10 +94,10 @@ The data curation process was meticulously designed to transform raw ABO data in
     * This image, along with the relevant JSON object (excluding the `all_image_id` field), was then sent to the Gemini model via a carefully crafted prompt (detailed in "Prompt Engineering") to generate high-quality Q&A pairs.
 
 ## Product Type Distribution Analysis
-https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_1.jpeg
-https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_2.jpeg
-https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_11.jpeg
-https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_12.jpeg
+![image](https://github.com/user-attachments/assets/c48cb497-5846-4f75-b556-9ec9453ad4ec)
+![image](https://github.com/user-attachments/assets/0b309650-8194-4f88-b59b-c0898a1b3572)
+![image](https://github.com/user-attachments/assets/1484554e-c6c0-456e-9e8c-8b2dfe51ecf3)
+![image](https://github.com/user-attachments/assets/e99fbe82-f351-46c7-acf0-3761de4f2b52)
 
 The remaining Parts Graphs Can be accessed at /DataCuration/OriginalDataSummary/Plots
 Upon analyzing the distribution of the 147,702 product listings across the 576 product types, a severe class imbalance was observed.
@@ -222,7 +222,7 @@ Our robust implementation was designed to manage API calls efficiently, handle e
 This robust implementation strategy allowed us to navigate the complexities of API rate limits and temporary service interruptions, ensuring the efficient and continuous generation of a large-scale VQA dataset.
 
 ## Results and Dataset Statistics
-
+![image](https://github.com/user-attachments/assets/e1a829e4-cf1e-4cde-8efd-02ecd067ae72)
 We successfully generated question-and-answer (Q&A) pairs for **177,375 images**, distributed across **559 categories**.
 
 * **Category Reduction**: We observed a slight reduction in the total number of categories from the initial 576. This can be attributed to multiple `image_id`s potentially sharing the same `product_type` but not being sampled, or some categories being excluded by the sampling algorithm if their count was extremely low and they didn't meet the minimum threshold after processing.
@@ -233,7 +233,8 @@ We successfully generated question-and-answer (Q&A) pairs for **177,375 images**
 The train-test split was a critical phase aimed at creating robust training and evaluation sets. The primary challenge was to ensure the test dataset maintained a high standard of quality and sufficient samples for meaningful evaluation, especially given the initial class imbalance.
 
 **Threshold Determination:**
-Upon analyzing the image distribution (as visually represented in the provided plots), we observed a clear pattern indicating that categories with fewer than a certain number of images would not provide statistically significant evaluation. Consequently, we established a threshold of **20 images**.
+![image](https://github.com/user-attachments/assets/65a04115-ea6a-427b-a73b-f4cc0ac1bb4f)
+Upon analyzing the image distribution (as visually represented in the provided plots as well as the image showing classes with there respective number of images in it for less than 110), we observed a clear pattern indicating that categories with fewer than a certain number of images would not provide statistically significant evaluation. Consequently, we established a threshold of **20 images**.
 
 **Data Splitting Methodology:**
 
@@ -258,7 +259,7 @@ Given the substantial size of the training dataset (143k JSON files), including 
 * **Batch Size**: Each batch was capped at **10,000 files**.
 * **Round-Robin Approach**: To ensure each batch contained a balanced mix of files from all available categories and prevented class imbalance within individual batches, we employed a round-robin approach. The system first collected all `.json` files from each category folder, shuffled them to introduce randomness, and then iteratively built batches by taking one file at a time from each category in a rotating manner.
 * **Directory Structure**: Once a batch reached 10,000 files, it was moved into a newly created folder under `master_train/`. This process continued until all files were distributed, maintaining class diversity across all generated batches and preventing skewness in any single training batch.
-
+![image](https://github.com/user-attachments/assets/3ecc303c-d928-4cd4-914b-971eb98fc5a7)
 This comprehensive train-test splitting and batching strategy ensures a robust evaluation framework and an efficiently loadable training corpus for developing VQA models.
 
 
