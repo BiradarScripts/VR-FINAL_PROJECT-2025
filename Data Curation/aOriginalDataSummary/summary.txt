@@ -1,0 +1,4 @@
+abo-listings-tar
+- Product listings and metadata (83 Mb)
+abo-images-small-tar
+- Downscaled (max 256 pixels) catalog images and metadata (3 Gb)
