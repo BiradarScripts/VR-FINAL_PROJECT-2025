@@ -93,7 +93,7 @@ The data curation process was meticulously designed to transform raw ABO data in
     * The corresponding image was retrieved using the path obtained from `images.csv`.
     * This image, along with the relevant JSON object (excluding the `all_image_id` field), was then sent to the Gemini model via a carefully crafted prompt (detailed in "Prompt Engineering") to generate high-quality Q&A pairs.
 
-## Product Type Distribution Analysis (All the 12 Parts are Provided Here (`/DataCuration/OriginalDataSumamry/Plots`))
+## Product Type Distribution Analysis (All the 12 Parts are Provided Here `/DataCuration/OriginalDataSumamry/Plots`)
 ![image](https://github.com/user-attachments/assets/c48cb497-5846-4f75-b556-9ec9453ad4ec)
 ![image](https://github.com/user-attachments/assets/0b309650-8194-4f88-b59b-c0898a1b3572)
 ![image](https://github.com/user-attachments/assets/1484554e-c6c0-456e-9e8c-8b2dfe51ecf3)
@@ -234,6 +234,7 @@ We successfully generated question-and-answer (Q&A) pairs for **177,375 images**
 The train-test split was a critical phase aimed at creating robust training and evaluation sets. The primary challenge was to ensure the test dataset maintained a high standard of quality and sufficient samples for meaningful evaluation, especially given the initial class imbalance.
 
 **Threshold Determination:**
+
 ![image](https://github.com/user-attachments/assets/65a04115-ea6a-427b-a73b-f4cc0ac1bb4f)
 
 Upon analyzing the image distribution (as visually represented in the provided plots as well as the image showing classes with there respective number of images in it for less than 110), we observed a clear pattern indicating that categories with fewer than a certain number of images would not provide statistically significant evaluation. Consequently, we established a threshold of **20 images**.
@@ -261,8 +262,30 @@ Given the substantial size of the training dataset (143k JSON files), including 
 * **Batch Size**: Each batch was capped at **10,000 files**.
 * **Round-Robin Approach**: To ensure each batch contained a balanced mix of files from all available categories and prevented class imbalance within individual batches, we employed a round-robin approach. The system first collected all `.json` files from each category folder, shuffled them to introduce randomness, and then iteratively built batches by taking one file at a time from each category in a rotating manner.
 * **Directory Structure**: Once a batch reached 10,000 files, it was moved into a newly created folder under `master_train/`. This process continued until all files were distributed, maintaining class diversity across all generated batches and preventing skewness in any single training batch.
+
 ![image](https://github.com/user-attachments/assets/3ecc303c-d928-4cd4-914b-971eb98fc5a7)
+
 This comprehensive train-test splitting and batching strategy ensures a robust evaluation framework and an efficiently loadable training corpus for developing VQA models.
+
+## 📦 Final Dataset Overview
+
+We’ve carefully curated two high-quality datasets to ensure robust model training and evaluation. Each dataset is hosted on Kaggle and publicly accessible.
+
+---
+
+### 🧠 Training Set – `Master-Train`
+
+This dataset forms the backbone of our learning process. It contains well-labeled, diverse, and balanced data samples crucial for developing a high-performing model.
+
+🔗 [Access Master-Train Dataset](https://www.kaggle.com/datasets/biradar1913/master-train)
+
+### 🧪 Test Set – `Master-Test`
+
+Our test set is designed to rigorously evaluate the model's generalization capabilities. It mirrors real-world scenarios to validate the model’s effectiveness post-training.
+
+🔗 [Access Master-Test Dataset](https://www.kaggle.com/datasets/biradar1913/master-test)
+
+---
 
 
 
