@@ -24,11 +24,12 @@ Our primary objectives for this project are:
 
 ---
 
-# 📦 Visual Question Answering (VQA) Dataset Curation for Amazon Berkeley Objects (ABO)
+# 📦 Amazon Berkeley Objects (ABO) Dataset
 
-This project focuses on the meticulous curation of a high-quality Visual Question Answering (VQA) dataset leveraging the extensive **Amazon Berkeley Objects (ABO)** dataset. VQA models require rich, diverse, and accurately annotated data to effectively interpret visual information and answer complex questions about it. The ABO dataset, with its vast collection of product images and associated metadata, presents an unparalleled resource for developing robust and generalizable VQA capabilities.
+The dataset comprises **147,702 product listings** enriched with **multilingual metadata** and a total of **398,212 unique catalog images**, making it a valuable resource for training and evaluating models in areas like product recognition, multilingual search, and e-commerce intelligence. A **smaller, more manageable variant** of the dataset is available for download (approximately **3GB** in size, compared to the original **100GB**), which includes product **metadata in CSV format** and **images resized to 256x256 pixels**. This compact version is ideal for quick experimentation and development without compromising on data quality. You can find the dataset [here](#) under the *Downloads* section—please select the "small variant" to avoid storage or processing issues.
 
-Our objective was to extract relevant information from the ABO dataset, formulate contextually rich questions, and generate multiple-choice answer options. This endeavor involved intricate data processing, strategic sampling to overcome class imbalance, sophisticated prompt engineering for question generation, and robust infrastructure for model execution and error handling.
+Would you like this tailored for a research paper, README file, or project report?
+
 
 ## Dataset Overview: Amazon Berkeley Objects (ABO)
 
