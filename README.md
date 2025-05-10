@@ -94,7 +94,12 @@ The data curation process was meticulously designed to transform raw ABO data in
     * This image, along with the relevant JSON object (excluding the `all_image_id` field), was then sent to the Gemini model via a carefully crafted prompt (detailed in "Prompt Engineering") to generate high-quality Q&A pairs.
 
 ## Product Type Distribution Analysis
+https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_1.jpeg
+https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_2.jpeg
+https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_11.jpeg
+https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/DataCuration/OriginalDataSummary/Plots/Part_12.jpeg
 
+The remaining Parts Graphs Can be accessed at /DataCuration/OriginalDataSummary/Plots
 Upon analyzing the distribution of the 147,702 product listings across the 576 product types, a severe class imbalance was observed.
 
 **Key Observations:**
