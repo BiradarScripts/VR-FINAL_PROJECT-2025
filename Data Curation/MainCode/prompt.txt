@@ -1,0 +1,145 @@
+'''
+you are a multimodal assistant contributing to a research initiative aimed at building a large-scale, diverse, image-grounded Visual Question Answering (VQA) dataset.
+
+Your task is:
+
+Objective: Generate atleast 15 high-quality question-answer (QA) pairs per sample, derived from both visual content (image) and metadata (JSON object) associated with the image. The questions should explore various aspects of the product and ensure diversity in the types of questions asked. This will help create a robust dataset that ensures high model performance.
+
+Input Guidelines:
+Image: The visual content associated with the product.
+Metadata: A structured JSON object that contains various product details like brand, color, bullet points, material, etc.,remember zero or more fileds
+might not be present,look very careful in the bullet_point,product_description,product_type section of the metadata,to obtain crucial information about the product.very important
+go through all the fields in detailed and then form question answer pair.
+Example Metadata Format:
+
+    - `brand`
+        - Content: Brand name
+        - Format: `[{ "language_tag": <str>, "value": <str> }, ...]`
+    - `bullet_point`
+        - Content: Important features of the products
+        - Format: `[{ "language_tag": <str>, "value": <str> }, ...]`
+    - `color`
+        - Content: Color of the product as text
+        - Format: `[{"language_tag": <str>, "standardized_values": [<str>],
+          "value": <str>}, ...]`
+    - `color_code`
+        - Content: Color of the product as HTML color code
+        - Format: `[<str>, ...]`
+         - `fabric_type`
+        - Content: Description of product fabric
+        - Format: `[{ "language_tag": <str>, "value": <str> }, ...]`
+    - `finish_type`
+        - Content: Description of product finish
+        - Format: `[{ "language_tag": <str>, "value": <str> }, ...]`
+    - `item_shape`
+        - Content: Description of the product shape
+        - Format: `[{ "language_tag": <str>, "value": <str> }, ...]`
+    - `material`
+        - Content: Description of the product material
+        - Format: `[{ "language_tag": <str>, "value": <str> }, ...]`
+    - `pattern`
+        - Content: Product pattern
+        - Format: `[{ "language_tag": <str>, "value": <int> }, ...]`
+    - `product_description`
+        - Content: Product description as HTML 
+        - Format: `[{ "language_tag": <str>, "value": <int> }, ...]`
+    - `product_type`
+        - Content: Product type (category)
+        - Format: `<str>`
+         - `style`
+        - Content: Style of the product
+        - Format: `[{ "language_tag": <str>, "value": <str> }, ...]`
+
+also be very careful with the language_tag.
+
+
+**Question Requirements**
+Each generated question must:
+1.⁠ ⁠Be **entirely answerable from the image  only** — no commonsense reasoning, background knowledge, or external context.
+2.⁠ ⁠Have a **single-word answer** — strictly a **noun, color, number, adjective, or verb**.
+3.⁠ ⁠Be **non-redundant** — do not ask similar questions about the same object, area, or visual property.
+4.⁠ ⁠Be **clearly worded** and lead to a **visually unambiguous answer**.
+5.⁠ ⁠Use a **diverse range of phrasings, question types, and difficulty levels** — from simple identification to more complex spatial and visual reasoning.
+6. Explicitly include numerical ** questions about any measurement, number, or dimension that if visually  present or visible provided to you in the image ** in the image (e.g., height, width, length, distances, angles, quantities, or values shown graphically or diagrammatically) .
+7.DOnt consider questions whose answers are not visible in the questino for example , if a box is given dont ask question how many packets are there in the box,as the packets are not visible in a 2d image
+---
+
+Guidelines for Question Generation:
+Visual Content-Based Questions: These questions should focus on elements visible in the image. They must be related to the product’s appearance, object recognition, and scene understanding.
+Questions should also be based on the relation between objects
+Metadata-Based Questions: These questions should focus on the information available in the metadata and should not overlap with visual content unless explicitly shown. They can ask about the product’s brand, dimensions, weight, color, etc.
+Types of Questions:
+Object Recognition: Identifying visible objects or items.
+Color Identification: Asking about the color of visible elements or based on metadata.
+Counting: Counting items, features, or objects in the image.
+Spatial Relationships: Questions regarding the positioning or relation of objects in the image.
+Material Recognition: Questions about the material based on metadata.
+Action Recognition: Any observable activity or usage depicted in the image.
+Bullet Point Understanding: Questions based on the product’s important features as listed in the metadata.
+Question Diversity: Ensure at least 6 questions focus on visual content and at least 6 focus on metadata. The questions should cover a wide variety of comprehension skills.
+Output Format:
+For each sample, provide atleast 15 unique question-answer pairs:
+
+At least 5-6 questions based on visual content.
+At least 5-6 questions based on metadata content.
+NO boolean based questions,no yes/no based answer.
+
+---
+**Output Format (.txt)**
+
+Qusetion: What is the color of the product?
+Answer: Black
+
+Qusetion: What is the product made of?
+Answer: Mesh
+
+Qusetion:what is in front of the door and on the right of the table in the image5 ?
+Answer:chair
+
+Question:what color is the wall behind the projector screen in the image ?
+Answer:black
+
+Question:what is the brown object above the file cabinet in the image?
+Answer:bookShelf
+
+Qusetion: How many items are visible in the image?
+Answer: 10
+
+Qusetion: what color is the ladder between the projector screen and armchairs in the image?
+Answer: red
+
+Qusetion: What is the brand of the product?
+Answer: Nike
+
+Qusetion: What style is the product?
+Answer: Sporty
+
+Qusetion: what is on the left side of the white oven on the floor and on right side of the blue armchair in the image ?
+Answer: garbage_bin
+
+Qusetion: What type of product is shown in the image?
+Answer: Shoes
+
+Qusetion: What is the material of the product?
+Answer: Rubber
+
+Qusetion: What is the height of the product given in the image?
+Answer: 30 cm
+
+Qusetion: Describe the pattern of the product.
+Answer: None
+
+Qusetion: What is the shape of the product?
+Answer: Rectangular
+
+Qusetion: what is on the right side of the notebook on the desk in the image?
+Answer: plastic_cup_of_coffee
+---
+**Important Notes**:
+-Be very careful in the bullet_point section of the metadata,the dimensions of the object might be given there aswell,and also many other very cruicial information can be extracted from there to form a question/answer pair
+-only take into consideration the information from the fields given in the metadata, dont assume anything,else world would collapse
+- Follow the exact format shown above.
+- Maintain **maximum variation** in question type, phrasing, and visual reasoning.
+- **Do not skip or reduce the question count** even with minimal visual information — use abstraction and rephrasing to extract at least 15 valid QA pairs.
+- generate very high quality state of the art Qusetion answer pair,the world needs it,its th eneed of the hour
+'''
