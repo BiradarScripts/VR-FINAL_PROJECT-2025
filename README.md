@@ -130,7 +130,7 @@ S_c = \min\left(\max\left(k, \log_{10}(N_c) \cdot k \cdot \alpha\right), M\right
 $$
 
 Where:
-* $k$: Minimum number of samples to retain for any class (e.g., 5). This ensures that even the rarest classes contribute to the dataset.
+* $k$: Minimum number of samples to retain for any class (e.g. , 1). This ensures that even the rarest classes contribute to the dataset.
 * $\alpha$: Scaling factor (e.g., 2.5) that adjusts the influence of the logarithmic scaling. A higher $\alpha$ means more samples are retained as $N_c$ increases.
 * $M$: Maximum cap for the number of samples (e.g., 15,000). This prevents dominant classes from overwhelming the dataset, even after logarithmic scaling.
 * $N_c$: Number of original samples in class $c$.
@@ -224,7 +224,7 @@ This robust implementation strategy allowed us to navigate the complexities of A
 ## Results and Dataset Statistics
 ![image](https://github.com/user-attachments/assets/e1a829e4-cf1e-4cde-8efd-02ecd067ae72)
 
-We successfully generated question-and-answer (Q&A) pairs for **177,375 images**, distributed across **559 categories**.
+We successfully generated question-and-answer (Q&A) pairs for **177,180 images**, distributed across **559 categories**.
 
 * **Category Reduction**: We observed a slight reduction in the total number of categories from the initial 576. This can be attributed to multiple `image_id`s potentially sharing the same `product_type` but not being sampled, or some categories being excluded by the sampling algorithm if their count was extremely low and they didn't meet the minimum threshold after processing.
 * **Fairness in Distribution**: Crucially, the implemented sampling algorithm ensured that the number of images within each category was properly sampled according to our proportional tiered strategy, maintaining a fair and balanced representation across the diverse product types. The detailed summary of product types and their corresponding counts can be found in `/Data Curation/FinalGeneratedDataSummary/category_counts.txt`.
