@@ -576,3 +576,8 @@ AMAZON_BOOK_READER_ACCESSORY1                 1
 TIMER               1                 1              
 DVD_PLAYER_OR_RECORDER1                 1              
 HAIRBAND            0                 3              
+
+
+Total Product Type: 576
+Total Image ID Count: 398,212
+Total Product Count: 147,702
