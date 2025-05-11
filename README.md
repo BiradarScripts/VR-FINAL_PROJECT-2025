@@ -93,8 +93,13 @@ The data curation process was meticulously designed to transform raw ABO data in
     * The corresponding image was retrieved using the path obtained from `images.csv`.
     * This image, along with the relevant JSON object (excluding the `all_image_id` field), was then sent to the Gemini model via a carefully crafted prompt (detailed in "Prompt Engineering") to generate high-quality Q&A pairs.
 
-## Product Type Distribution Analysis
+## Product Type Distribution Analysis (All the 12 Parts are Provided Here `/DataCuration/OriginalDataSumamry/Plots`)
+![image](https://github.com/user-attachments/assets/c48cb497-5846-4f75-b556-9ec9453ad4ec)
+![image](https://github.com/user-attachments/assets/0b309650-8194-4f88-b59b-c0898a1b3572)
+![image](https://github.com/user-attachments/assets/1484554e-c6c0-456e-9e8c-8b2dfe51ecf3)
+![image](https://github.com/user-attachments/assets/e99fbe82-f351-46c7-acf0-3761de4f2b52)
 
+Here we Have included the top 2 parts/groups and bottom 2 parts/groups,The remaining Parts/Group Graphs Can be accessed at The above mentioned Path
 Upon analyzing the distribution of the 147,702 product listings across the 576 product types, a severe class imbalance was observed.
 
 **Key Observations:**
@@ -125,7 +130,7 @@ S_c = \min\left(\max\left(k, \log_{10}(N_c) \cdot k \cdot \alpha\right), M\right
 $$
 
 Where:
-* $k$: Minimum number of samples to retain for any class (e.g., 5). This ensures that even the rarest classes contribute to the dataset.
+* $k$: Minimum number of samples to retain for any class (e.g. , 1). This ensures that even the rarest classes contribute to the dataset.
 * $\alpha$: Scaling factor (e.g., 2.5) that adjusts the influence of the logarithmic scaling. A higher $\alpha$ means more samples are retained as $N_c$ increases.
 * $M$: Maximum cap for the number of samples (e.g., 15,000). This prevents dominant classes from overwhelming the dataset, even after logarithmic scaling.
 * $N_c$: Number of original samples in class $c$.
@@ -141,7 +146,7 @@ This strategy creates a more balanced and diverse dataset, crucial for training 
 
 ## Prompt Engineering for VQA Generation
 
-The prompt, located in `/Data Curation/MainCode/Prompt.txt`, was meticulously crafted to generate high-quality question-answer pairs. Its primary objective was to ensure a comprehensive exploration of both visual content and product metadata, aiming to produce diverse, non-redundant, and detailed questions.
+The prompt, located in `/DataCuration/MainCode/Prompt.txt`, was meticulously crafted to generate high-quality question-answer pairs. Its primary objective was to ensure a comprehensive exploration of both visual content and product metadata, aiming to produce diverse, non-redundant, and detailed questions.
 
 **Key Considerations in Prompt Design:**
 
@@ -183,7 +188,7 @@ After thoroughly evaluating both models, we ultimately chose **Gemini** over **L
 
 To address Gemini's API limitations and efficiently scale the generation process while maintaining quality, we developed a novel API key management and error handling strategy, which is detailed in the subsequent section.
 
-## Implementation Details: The Code (`/Data Curation/MainCode/Final.py`)
+## Implementation Details: The Code (`/DataCuration/MainCode/Final.py`)
 
 Our robust implementation was designed to manage API calls efficiently, handle errors gracefully, and ensure the continuous generation of Q&A pairs for a large dataset.
 
@@ -209,7 +214,7 @@ Our robust implementation was designed to manage API calls efficiently, handle e
 ### Output Storage
 
 * The generated question-answer (QA) pairs are stored persistently in a separate directory, organized as individual `.json` files.
-* Each `.json` file is named after its corresponding `image_id` (e.g., `image_id_xxxx.json`).
+* Each `.json` file is named after its corresponding `image_id` 
 * Each file contains two key fields:
     * `image_path`: The relative path to the image file.
     * `qa_pairs`: A list of dictionaries, each representing a Q&A pair generated for that image.
@@ -217,8 +222,9 @@ Our robust implementation was designed to manage API calls efficiently, handle e
 This robust implementation strategy allowed us to navigate the complexities of API rate limits and temporary service interruptions, ensuring the efficient and continuous generation of a large-scale VQA dataset.
 
 ## Results and Dataset Statistics
+![image](https://github.com/user-attachments/assets/e1a829e4-cf1e-4cde-8efd-02ecd067ae72)
 
-We successfully generated question-and-answer (Q&A) pairs for **177,375 images**, distributed across **559 categories**.
+We successfully generated question-and-answer (Q&A) pairs for **177,180 images**, distributed across **559 categories**.
 
 * **Category Reduction**: We observed a slight reduction in the total number of categories from the initial 576. This can be attributed to multiple `image_id`s potentially sharing the same `product_type` but not being sampled, or some categories being excluded by the sampling algorithm if their count was extremely low and they didn't meet the minimum threshold after processing.
 * **Fairness in Distribution**: Crucially, the implemented sampling algorithm ensured that the number of images within each category was properly sampled according to our proportional tiered strategy, maintaining a fair and balanced representation across the diverse product types. The detailed summary of product types and their corresponding counts can be found in `/Data Curation/FinalGeneratedDataSummary/category_counts.txt`.
@@ -228,7 +234,10 @@ We successfully generated question-and-answer (Q&A) pairs for **177,375 images**
 The train-test split was a critical phase aimed at creating robust training and evaluation sets. The primary challenge was to ensure the test dataset maintained a high standard of quality and sufficient samples for meaningful evaluation, especially given the initial class imbalance.
 
 **Threshold Determination:**
-Upon analyzing the image distribution (as visually represented in the provided plots), we observed a clear pattern indicating that categories with fewer than a certain number of images would not provide statistically significant evaluation. Consequently, we established a threshold of **20 images**.
+
+![image](https://github.com/user-attachments/assets/65a04115-ea6a-427b-a73b-f4cc0ac1bb4f)
+
+Upon analyzing the image distribution (as visually represented in the provided plots as well as the image showing classes with there respective number of images in it for less than 110), we observed a clear pattern indicating that categories with fewer than a certain number of images would not provide statistically significant evaluation. Consequently, we established a threshold of **20 images**.
 
 **Data Splitting Methodology:**
 
@@ -254,7 +263,119 @@ Given the substantial size of the training dataset (143k JSON files), including 
 * **Round-Robin Approach**: To ensure each batch contained a balanced mix of files from all available categories and prevented class imbalance within individual batches, we employed a round-robin approach. The system first collected all `.json` files from each category folder, shuffled them to introduce randomness, and then iteratively built batches by taking one file at a time from each category in a rotating manner.
 * **Directory Structure**: Once a batch reached 10,000 files, it was moved into a newly created folder under `master_train/`. This process continued until all files were distributed, maintaining class diversity across all generated batches and preventing skewness in any single training batch.
 
+![image](https://github.com/user-attachments/assets/3ecc303c-d928-4cd4-914b-971eb98fc5a7)
+
 This comprehensive train-test splitting and batching strategy ensures a robust evaluation framework and an efficiently loadable training corpus for developing VQA models.
+
+## 📦 Final Dataset Overview
+
+We’ve carefully curated two high-quality datasets to ensure robust model training and evaluation. Each dataset is hosted on Kaggle and publicly accessible.
+
+---
+
+### 🧠 Training Set – `Master-Train`
+
+This dataset forms the backbone of our learning process. It contains well-labeled, diverse, and balanced data samples crucial for developing a high-performing model.
+
+🔗 [Access Master-Train Dataset](https://www.kaggle.com/datasets/biradar1913/master-train)
+
+### 🧪 Test Set – `Master-Test`
+
+Our test set is designed to rigorously evaluate the model's generalization capabilities. It mirrors real-world scenarios to validate the model’s effectiveness post-training.
+
+🔗 [Access Master-Test Dataset](https://www.kaggle.com/datasets/biradar1913/master-test)
+
+---
+
+
+# Model Fine-tuning with LoRA
+
+### Data Preparation and Loading
+
+A custom PyTorch `Dataset` class, `VQADataset`, was implemented to handle the loading and preprocessing of image-question-answer triplets.
+
+### `VQADataset` Class
+
+The `VQADataset` class is responsible for:
+- Scanning specified JSON directories for VQA data. Each JSON file is expected to contain an image path and a list of question-answer pairs.
+- Constructing the full image path by combining a base image directory with the relative path from the JSON file. It also handles specific path cleaning (e.g., removing `abo-images-small/` prefix).
+- Storing each image-question-answer triplet as a sample.
+- In the `__getitem__` method:
+    * Loading the image using Pillow and converting it to RGB.
+    * Processing the image and question using the BLIP processor. This includes tokenization, padding to `max_length=128`, and truncation.
+    * Tokenizing the answer using the BLIP processor's tokenizer, padding to `max_length=10`, and truncation.
+    * Ensuring outputs are PyTorch tensors and correctly formatted for the model.
+
+### Base Model and Processor
+The foundation of the fine-tuning process was the Salesforce/blip-vqa-base model and its corresponding processor, loaded from Hugging Face Transformers.
+
+###  LoRA Configuration
+Low-Rank Adaptation (LoRA) was applied to make the fine-tuning process more efficient. The peft library from Hugging Face was used for this purpose.
+
+The LoRA configuration was as follows:
+
+- r=8: Rank of the LoRA matrices.
+- lora_alpha=32: Scaling factor for LoRA.
+- target_modules=['qkv', 'projection']: Modules in the BLIP model to which LoRA was applied.
+- lora_dropout=0.05: Dropout probability for LoRA layers.
+- bias='none': Bias terms were not trained with LoRA.
+
+### Iterative Training Strategy
+
+The total dataset was divided into 14 master batches. The fine-tuning process was iterative:
+
+- Initial State: Started with the base blip-vqa-base model or a previously fine-tuned checkpoint.
+- Train on Master Batch N: The model was trained on one master batch of data (e.g., batch_1). The training script utilized a standard loop with loss computation, backpropagation, and optimizer steps (optim.AdamW with lr=10e-5).
+- Checkpointing: During training on a master batch, model weights, processor files, and the training state (optimizer state, current step, loss history) were saved periodically (e.g., every 1000 steps) and at the end of training on that batch. This allowed for resuming training if interrupted and for loading the model for the next iteration.
+- Save path example: /kaggle/working/model_latest_vN
+- Resume state path example: /kaggle/working/model_latest_vN/training_state.pt
+
+- Global Validation: After training on each master batch, the model's performance was validated on a global test dataset (approx. 40k images). This allowed tracking of accuracy improvement as the model saw more data.
+
+- Iterate: The saved model and optimizer states from training on master batch N became the starting point for training on master batch N+1. The load_path was updated to the save_path of the previous iteration, and the json_root_dir was updated to the next master batch directory.
+- This sequential training on different data batches allowed the model to gradually learn from the entire dataset while managing resources and enabling incremental checkpointing and evaluation.
+
+
+### Training Loop and Loss Visualization
+The training loop iterated through the train_loader for a fixed number of epochs (typically 1 for each master batch in the sequential training setup).
+Loss history (step vs. loss) was recorded and plotted to monitor training progress. Three types of loss plots were generated and saved after each major training phase (e.g., after processing a master batch):
+
+- Raw Loss Plot: loss_plot_raw.png
+- Smoothed Loss Plot (using Gaussian filter): loss_plot_smoothed.png
+- Log-Scale Loss Plot: loss_plot_logscale.png
+
+
+##  Evaluation
+
+After the full iterative training cycle (or at intermediate stages after each master batch), the model was evaluated on a dedicated test dataset.
+
+### Evaluation Setup
+- The fine-tuned model and processor were loaded from their saved path (e.g., /kaggle/working/model_latest_v8).
+- Hugging Face Accelerator was used for potentially distributed inference.
+- A VQADataset instance was created for the test data (e.g., from /kaggle/input/master-test/test_dataset).
+- A DataLoader was used for batching the test data.
+- Mixed-precision inference (autocast) was used for speed.
+### Metrics
+The following metrics were used for evaluation:
+
+- Exact Match (EM): The percentage of predicted answers that exactly match the ground truth answers after stripping leading/trailing whitespace and converting to lowercase.
+- BERTScore: An automatic evaluation metric that computes a similarity score between predicted and reference sentences using contextual embeddings from BERT. We reported Precision, Recall, and F1 BERTScore.
+The compute_metrics function (shown in the initial problem description) calculates simple accuracy, which could be used for the batch-wise accuracy validation mentioned. The final evaluation script calculates EM and BERTScore.
+
+### Batch-wise Accuracy Improvement
+The strategy of iterative training on 14 master batches and validating on a global test set after each master batch allowed for tracking the model's improvement. A plot depicting the (Exact Match or other accuracy metric) vs. the number of master batches trained would show this progression. This demonstrated how the model's understanding improved as it was exposed to more diverse data sequentially.
+
+(Example: Insert your batch-wise accuracy plot here or describe it. This plot would show accuracy on the Y-axis and Master Batch Number (1 to 14) on the X-axis.)
+
+
+### Evaluation Metrics
+The final evaluation of the model (e.g., model_latest_v8 trained on all 14 master batches) on the test dataset yielded the following (example values):
+
+- Exact Match (EM): XX.XX%
+- BERTScore - Precision: Y.YYYY
+- BERTScore - Recall: Z.ZZZZ
+- BERTScore - F1: A.AAAA
+- Inference Speed: BB.BB samples/sec
 
 
 
