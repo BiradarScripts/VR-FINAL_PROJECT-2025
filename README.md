@@ -94,10 +94,10 @@ The data curation process was meticulously designed to transform raw ABO data in
     * This image, along with the relevant JSON object (excluding the `all_image_id` field), was then sent to the Gemini model via a carefully crafted prompt (detailed in "Prompt Engineering") to generate high-quality Q&A pairs.
 
 ## Product Type Distribution Analysis (All the 12 Parts are Provided Here `/DataCuration/OriginalDataSumamry/Plots`)
-![image](https://github.com/user-attachments/assets/c48cb497-5846-4f75-b556-9ec9453ad4ec)
-![image](https://github.com/user-attachments/assets/0b309650-8194-4f88-b59b-c0898a1b3572)
-![image](https://github.com/user-attachments/assets/1484554e-c6c0-456e-9e8c-8b2dfe51ecf3)
-![image](https://github.com/user-attachments/assets/e99fbe82-f351-46c7-acf0-3761de4f2b52)
+![Part_1](https://github.com/user-attachments/assets/4248c1a8-0049-4a81-8ce6-dbd144cae5e7)
+![Part_2](https://github.com/user-attachments/assets/9374ced6-229d-4569-a13e-b9424c27698a)
+![part_11](https://github.com/user-attachments/assets/4792c32e-27e2-4222-b6de-cc88fab56705)
+![part_12](https://github.com/user-attachments/assets/63e88a72-ac07-46f9-82ac-550111ca7afa)
 
 Here we Have included the top 2 parts/groups and bottom 2 parts/groups,The remaining Parts/Group Graphs Can be accessed at The above mentioned Path
 Upon analyzing the distribution of the 147,702 product listings across the 576 product types, a severe class imbalance was observed.
@@ -221,11 +221,14 @@ Our robust implementation was designed to manage API calls efficiently, handle e
 
 This robust implementation strategy allowed us to navigate the complexities of API rate limits and temporary service interruptions, ensuring the efficient and continuous generation of a large-scale VQA dataset.
 
-## Results and Dataset Statistics
-![image](https://github.com/user-attachments/assets/e1a829e4-cf1e-4cde-8efd-02ecd067ae72)
+## Results and Dataset Statistics (`/DataCuration/FinalGeneratedDataSummary/plots`)
+![Part_1](https://github.com/user-attachments/assets/24de018e-a7ad-4b35-80d3-f2d75912822c)
+![Part_2](https://github.com/user-attachments/assets/541e59a1-968d-499b-a0c1-14ae1e31a2b5)
+![Part_11](https://github.com/user-attachments/assets/2e82e65e-7c51-4869-9b37-dbf73fc4d20e)
+![Part_12](https://github.com/user-attachments/assets/01dd7a5d-01cc-4280-a381-f00584c353d6)
+Here we Have included the top 2 parts/groups and bottom 2 parts/groups,The remaining Parts/Group Graphs Can be accessed at The above mentioned Path
 
 We successfully generated question-and-answer (Q&A) pairs for **177,180 images**, distributed across **559 categories**.
-
 * **Category Reduction**: We observed a slight reduction in the total number of categories from the initial 576. This can be attributed to multiple `image_id`s potentially sharing the same `product_type` but not being sampled, or some categories being excluded by the sampling algorithm if their count was extremely low and they didn't meet the minimum threshold after processing.
 * **Fairness in Distribution**: Crucially, the implemented sampling algorithm ensured that the number of images within each category was properly sampled according to our proportional tiered strategy, maintaining a fair and balanced representation across the diverse product types. The detailed summary of product types and their corresponding counts can be found in `/Data Curation/FinalGeneratedDataSummary/category_counts.txt`.
 
