@@ -100,7 +100,7 @@ The data curation process was meticulously designed to transform raw ABO data in
 ![part_12](https://github.com/user-attachments/assets/63e88a72-ac07-46f9-82ac-550111ca7afa)
 
 Here we Have included the top 2 parts/groups and bottom 2 parts/groups,The remaining Parts/Group Graphs Can be accessed at The above mentioned Path
-Upon analyzing the distribution of the 147,702 product listings across the 576 product types, a severe class imbalance was observed.
+Upon analyzing the distribution of the 147,702 product listings with multilingual metadata and 398,212 unique catalog image across the 576 product types, a severe class imbalance was observed.
 
 **Key Observations:**
 
