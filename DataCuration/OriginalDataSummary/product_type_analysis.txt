@@ -1,0 +1,578 @@
+Product Type        Image ID Count    Product Count  
+-----------------------------------------------------
+CELLULAR_PHONE_CASE 281796            64853          
+SHOES               76680             12965          
+GROCERY             35708             6546           
+HOME                24551             5264           
+HOME_BED_AND_BATH   13247             3082           
+HOME_FURNITURE_AND_DECOR13032             2255           
+CHAIR               12696             2100           
+SANDAL              12536             1845           
+BOOT                11018             2009           
+HEALTH_PERSONAL_CARE7876              1449           
+SOFA                7802              1199           
+TABLE               5818              936            
+PET_SUPPLIES        5678              1064           
+OFFICE_PRODUCTS     5587              1152           
+HARDWARE_HANDLE     5004              860            
+HANDBAG             4718              792            
+RUG                 4187              817            
+SPORTING_GOODS      4166              972            
+LIGHT_BULB          4156              756            
+FINERING            4006              1540           
+FINENECKLACEBRACELETANKLET3954              1377           
+KITCHEN             3649              706            
+LAMP                3603              544            
+LIGHT_FIXTURE       3144              544            
+ACCESSORY           3131              1362           
+FINEEARRING         3025              1137           
+OUTDOOR_LIVING      2872              635            
+WALL_ART            2719              599            
+STOOL_SEATING       2669              393            
+SUITCASE            2550              429            
+JANITORIAL_SUPPLY   2413              579            
+BEAUTY              2380              452            
+SAFETY_SUPPLY       2199              416            
+OTTOMAN             2066              403            
+TOOLS               1922              379            
+PORTABLE_ELECTRONIC_DEVICE_COVER1862              329            
+FLAT_SHEET          1854              476            
+FURNITURE_COVER     1847              257            
+BISS                1835              390            
+FOOD_SERVICE_SUPPLY 1822              373            
+CABINET             1805              229            
+COFFEE              1770              293            
+SHELF               1745              287            
+NUTRITIONAL_SUPPLEMENT1701              287            
+DRINKING_CUP        1662              380            
+HEADBOARD           1641              297            
+VITAMIN             1591              240            
+HERB                1563              301            
+BACKPACK            1496              258            
+BED                 1493              221            
+PILLOW              1484              275            
+AUTO_ACCESSORY      1449              299            
+PLANTER             1330              273            
+STORAGE_HOOK        1330              236            
+LUGGAGE             1300              243            
+DESK                1247              180            
+NECKLACE            1237              457            
+EARRING             1207              645            
+SKIN_CLEANING_AGENT 1186              247            
+HARDWARE            1178              259            
+STORAGE_BINDER      1171              188            
+HAT                 1158              655            
+SCREEN_PROTECTOR    1156              167            
+WIRELESS_ACCESSORY  1125              241            
+WALLET              1125              176            
+COMPUTER_ADD_ON     1094              204            
+BABY_PRODUCT        1058              263            
+PANTRY              1056              201            
+LEGUME              980               166            
+CLEANING_AGENT      979               214            
+OFFICE_ELECTRONICS  975               152            
+WASTE_BAG           960               165            
+TEA                 929               164            
+SAUTE_FRY_PAN       927               168            
+BATTERY             881               207            
+MEDICATION          875               123            
+SKIN_MOISTURIZER    857               167            
+JAR                 853               151            
+FLAT_SCREEN_DISPLAY_MOUNT821               141            
+FURNITURE           796               123            
+CHARGING_ADAPTER    779               149            
+ELECTRONIC_ADAPTER  777               140            
+HEADPHONES          770               156            
+HOME_LIGHTING_AND_LAMPS766               146            
+ABIS_LAWN_AND_GARDEN762               135            
+SAUCE               758               107            
+EDIBLE_OIL_VEGETABLE757               107            
+ACCESSORY_OR_PART_OR_SUPPLY751               163            
+STORAGE_BAG         742               114            
+INSTRUMENT_PARTS_AND_ACCESSORIES740               152            
+PLUMBING_FIXTURE    735               149            
+UMBRELLA            728               104            
+BED_FRAME           718               103            
+ABIS_DRUGSTORE      692               152            
+MAJOR_HOME_APPLIANCES690               96             
+RECREATION_BALL     676               132            
+BREAD               654               154            
+SPEAKERS            648               103            
+CLOCK               636               125            
+FILE_FOLDER         631               125            
+HOME_MIRROR         630               109            
+DAIRY_BASED_DRINK   629               114            
+DRESSER             618               96             
+WRITING_INSTRUMENT  616               124            
+BENCH               584               105            
+COMPUTER_COMPONENT  583               112            
+LAUNDRY_DETERGENT   582               86             
+TOWEL_HOLDER        575               105            
+STORAGE_BOX         543               102            
+DAIRY_BASED_CHEESE  542               85             
+BASKET              541               89             
+FAUCET              541               64             
+NOODLE              526               81             
+FRUIT               525               97             
+SKIN_CLEANING_WIPE  517               78             
+PROTEIN_SUPPLEMENT_POWDER511               83             
+STRING_LIGHT        502               79             
+LOCK                498               84             
+THERMOPLASTIC_FILAMENT497               107            
+SNACK_MIX           493               77             
+EXERCISE_MAT        492               92             
+LABEL               475               113            
+CLOTHES_RACK        475               73             
+FLATWARE            466               94             
+WINDOW_SHADE        455               68             
+ELECTRIC_FAN        453               83             
+RING                448               336            
+HERBAL_SUPPLEMENT   444               69             
+BEAN_BAG_CHAIR      435               73             
+TOILET_PAPER_HOLDER 419               77             
+DISHWARE_PLACE_SETTING416               70             
+VEGETABLE           415               80             
+BREAKFAST_CEREAL    404               66             
+LAUNDRY_HAMPER      402               63             
+CLOTHES_HANGER      402               122            
+COSMETIC_CASE       392               65             
+WINE                389               81             
+WRENCH              384               75             
+ENVELOPE            383               70             
+COOKIE              373               68             
+JUICE_AND_JUICE_DRINK372               57             
+WRITING_BOARD       368               61             
+PAPER_PRODUCT       365               79             
+EYEWEAR             346               72             
+SNACK_CHIP_AND_CRISP342               58             
+TEACHING_EQUIPMENT  341               86             
+KEYBOARDS           337               61             
+DRYING_RACK         334               56             
+FINEOTHER           332               101            
+MECHANICAL_COMPONENTS328               84             
+AUTO_PART           327               69             
+POWER_SUPPLIES_OR_PROTECTION324               69             
+DUTCH_OVENS         310               69             
+PORTABLE_ELECTRONIC_DEVICE_STAND309               48             
+MULTIPORT_HUB       307               56             
+CARGO_STRAP         306               72             
+PROFESSIONAL_HEALTHCARE305               72             
+TECHNICAL_SPORT_SHOE305               37             
+MINERAL_SUPPLEMENT  304               49             
+FREESTANDING_SHELTER299               33             
+BRACELET            293               141            
+TRASH_CAN           291               73             
+SAFE                291               44             
+BODY_POSITIONER     284               60             
+DISHWARE_PLATE      281               71             
+AREA_DEODORIZER     273               51             
+BOTTLE              270               54             
+WATER               269               46             
+HOME_LIGHTING_ACCESSORY266               56             
+VASE                263               55             
+PACKAGED_SOUP_AND_STEW262               37             
+SECURITY_ELECTRONICS260               46             
+MUSCLE_ROLLER       255               56             
+TOY_FIGURE          253               37             
+SHAMPOO             249               51             
+CRACKER             248               36             
+DRINK_FLAVORED      245               38             
+FACIAL_TISSUE       242               41             
+AIR_CONDITIONER     240               36             
+INPUT_MOUSE         240               45             
+TOTE_BAG            239               44             
+OUTDOOR_RECREATION_PRODUCT235               58             
+ABIS_KITCHEN        228               40             
+CAMERA_OTHER_ACCESSORIES222               44             
+PRINT_COPY_PAPER    218               62             
+ABIS_BEAUTY         215               46             
+PHONE_ACCESSORY     214               49             
+CONSUMER_ELECTRONICS211               40             
+LIP_COLOR           211               47             
+NUT_BUTTER          206               30             
+VIDEO_GAME_ACCESSORIES205               36             
+SUNSCREEN           204               45             
+SNACK_FOOD_BAR      202               29             
+CAMERA_TRIPOD       202               34             
+FOOD_BLENDER        201               37             
+EXERCISE_BAND       201               42             
+EARMUFF             198               47             
+SUGAR               198               33             
+DISHWASHER_DETERGENT195               30             
+CE_ACCESSORY        193               33             
+CANDLE              191               42             
+PORTABLE_ELECTRONIC_DEVICE_MOUNT189               32             
+CONDITIONER         183               34             
+VACUUM_CLEANER      183               30             
+CAKE                183               42             
+DISHWARE_BOWL       182               42             
+SALAD_DRESSING      182               30             
+COSMETIC_BRUSH      181               35             
+BUCKET              180               30             
+LEOTARD             174               39             
+CARRYING_CASE_OR_BAG174               29             
+MOUTHWASH           170               41             
+STAPLER             166               28             
+STICKER_DECAL       161               36             
+CLEANING_BRUSH      160               32             
+MARKING_PEN         160               32             
+FRUIT_SNACK         159               22             
+MICROPHONE          158               28             
+SAFETY_GLASSES      157               29             
+HONEY               155               27             
+PLACEMAT            151               31             
+ORTHOPEDIC_BRACE    147               32             
+CAMERA_BAGS_AND_CASES147               30             
+DAIRY_BASED_ICE_CREAM145               24             
+ANTENNA             144               27             
+SCREWDRIVER         144               30             
+CHOCOLATE_CANDY     143               20             
+STORAGE_RACK        142               26             
+ELECTRIC_WATER_BOILER141               24             
+NUTS                141               21             
+WATER_PURIFICATION_UNIT140               25             
+BATHWATER_ADDITIVE  140               29             
+FLOUR               139               23             
+MATTRESS            137               17             
+FASHIONRING         137               44             
+SHOWERHEAD          135               18             
+CAMERA_LENS_FILTERS 134               25             
+HUMIDIFIER          132               28             
+LIGHT_SOURCE        131               19             
+PERSONAL_CARE_APPLIANCE130               24             
+MILK_SUBSTITUTE     130               18             
+BAKING_PAN          125               33             
+DAIRY_BASED_CREAM   124               21             
+PHONE               124               16             
+POULTRY             123               23             
+FASHIONNECKLACEBRACELETANKLET123               41             
+FLASH_MEMORY        123               27             
+SHOE_INSERT         123               23             
+SCISSORS            123               20             
+MEAL_HOLDER         123               22             
+COFFEE_MAKER        119               20             
+DRILL_BITS          118               28             
+VEHICLE_INTERIOR_SHADE117               20             
+POWER_STRIP         113               29             
+KITCHEN_KNIFE       112               21             
+EARPLUG             111               29             
+JEWELRY_STORAGE     111               27             
+WATER_PUMP          108               15             
+SOUND_AND_RECORDING_EQUIPMENT108               21             
+SHIPPING_BOX        107               16             
+AUTO_OIL            107               31             
+VEHICLE_SEAT_COVER  107               15             
+FOOD_STORAGE_BAG    106               28             
+STEERING_WHEEL_COVER106               19             
+PERSONAL_COMPUTER   106               22             
+STORAGE_DRAWER      105               21             
+JEWELRY_SET         105               25             
+FIRST_AID_KIT       102               11             
+INK_OR_TONER        101               21             
+VINEGAR             101               17             
+CHILDRENS_COSTUME   100               16             
+DOORSTOP            98                18             
+TOILET_SEAT         98                16             
+SUNGLASSES          97                18             
+PAPER_TOWEL_HOLDER  96                15             
+CE_CARRYING_CASE_OR_BAG96                17             
+POPCORN             96                16             
+ELECTROMECHANICAL_GAUGE96                14             
+BROOM               91                17             
+FASHIONEARRING      90                34             
+WOUND_DRESSING      90                20             
+INCENSE             88                16             
+VIDEO_PROJECTOR     87                15             
+FISH                87                13             
+CANDY               87                15             
+TOOTHBRUSH          85                17             
+WATCH               85                28             
+SWATCH              84                84             
+LAB_SUPPLY          84                22             
+TENT                83                13             
+BAG                 83                14             
+INKJET_PRINTER_INK  83                17             
+BAKING_MIX          82                12             
+PLIERS              82                18             
+LANDLINE_PHONE      81                10             
+TOASTER             80                14             
+WHEEL               79                16             
+RAZOR_BLADE_CARTRIDGE79                12             
+PUMP_DISPENSER      78                21             
+CAN_OPENER          77                15             
+COMPUTER_DRIVE_OR_STORAGE77                45             
+FOOD_SLICER         76                15             
+BOTTLE_RACK         76                16             
+MICROSCOPES         76                12             
+BARBECUE_GRILL      76                8              
+LADDER              75                13             
+WEIGH_SCALE         74                13             
+TOYS_AND_GAMES      74                15             
+MEAT                73                15             
+CURTAIN             72                17             
+MOUSE_PAD           72                16             
+HARDWARE_HINGE      71                16             
+PRETZEL             70                12             
+WASHER_DRYER_COMBINATION69                9              
+CARD_STOCK          66                13             
+BLANK_MEDIA         66                18             
+ART_AND_CRAFT_SUPPLY64                11             
+COMPUTER            64                13             
+AV_FURNITURE        63                13             
+PET_APPAREL         63                9              
+SALWAR_SUIT_SET     62                26             
+SKIN_EXFOLIANT      62                8              
+TOY_SLIME           61                12             
+HAIR_IRON           60                10             
+RADIO               60                10             
+UTILITY_KNIFE       59                11             
+STATIONARY_BICYCLE  59                13             
+ELECTRONIC_CABLE    59                9              
+PORTABLE_AV_DEVICE  59                10             
+CAMERA_SUPPORT      59                7              
+PITCHER             58                14             
+CANDLE_HOLDER       58                12             
+AIR_MATTRESS        56                7              
+POT_HOLDER          56                11             
+RICE_COOKERS        56                9              
+SEALS               56                17             
+WILDLIFE_FEEDER     55                15             
+MULTITOOL           55                8              
+REMOTE_CONTROL      54                12             
+PRESSURE_COOKER     54                9              
+EYELID_COLOR        53                17             
+JUICER              53                8              
+STRINGED_INSTRUMENTS53                8              
+RICE_MIX            52                7              
+FOOD_PROCESSOR      52                8              
+PORTABLE_AUDIO      51                21             
+PERSONAL_PILL_DISPENSER50                8              
+BUILDING_MATERIAL   50                9              
+CASSEROLES          49                11             
+FOOD_MIXER          49                8              
+LAUNDRY_APPLIANCE   49                6              
+ABIS_HOME_IMPROVEMENT49                12             
+THERMOS             49                9              
+ANIMAL_LITTER       49                8              
+HAIR_REMOVAL_AGENT  48                8              
+PACIFIER            48                6              
+INPUT_PEN           47                12             
+COMPUTER_INPUT_DEVICE47                14             
+NETWORKING_DEVICE   47                7              
+MANUAL_SHAVING_RAZOR47                7              
+ABIS_ELECTRONICS    46                19             
+FASHIONOTHER        46                28             
+BODY_DEODORANT      46                10             
+SPIRITS             46                9              
+HAIR_COMB           45                9              
+SLEEPING_BAG        45                9              
+HARDWARE_TUBING     45                8              
+PASTRY              45                13             
+HAIR_STYLING_AGENT  44                10             
+ESSENTIAL_OIL       44                10             
+THERMOMETER         43                8              
+TOOTH_CLEANING_AGENT42                6              
+HAIR_CLEANER_CONDITIONER41                7              
+ASTRINGENT_SUBSTANCE41                8              
+ICE_CHEST           41                6              
+EDUCATIONAL_SUPPLIES41                9              
+CAMCORDER           41                7              
+GOLF_CLUB_BAG       41                6              
+BINOCULAR           40                6              
+NOTEBOOK_COMPUTER   39                9              
+PET_PEST_CONTROL    38                8              
+DAIRY_BASED_BUTTER  38                6              
+BARBELL             37                7              
+PUZZLES             37                7              
+WATER_FLOTATION_DEVICE36                9              
+VALVE               36                6              
+MASSAGER            36                7              
+PORTABLE_STOVE      36                4              
+LICENSE_PLATE_ATTACHMENT35                7              
+REFRIGERATOR        35                5              
+COUNTERTOP_OVEN     34                5              
+COUNTERTOP_GRIDDLE_APPLIANCE33                6              
+TELEVISION          33                5              
+BOXING_GLOVE        33                8              
+FITNESS_BENCH       33                7              
+CHANGING_PAD_COVER  32                9              
+SYSTEM_POWER_DEVICE 32                6              
+SUGAR_SUBSTITUTE    32                4              
+POWER_CONVERTER     32                5              
+DEHUMIDIFIER        31                5              
+MICROWAVE_OVEN      31                7              
+FOOD_PREPARATION_MOLD31                7              
+JERKY               30                5              
+VEHICLE_LIGHT_BULB  30                5              
+BOOKEND             30                7              
+BODY_LUBRICANT      30                4              
+SHEET_PAN           29                15             
+FOUNTAIN            29                6              
+TOOTHBRUSH_HOLDER   29                8              
+TRANSPORT_RACK      29                5              
+CAR_ELECTRONICS     28                7              
+NAIL_POLISH         28                7              
+BAKING_CUP          28                5              
+LEAVENING_AGENT     28                4              
+CADDY               27                5              
+FACE_SHAPING_MAKEUP 27                6              
+RECEIVER_OR_AMPLIFIER27                4              
+GPS_OR_NAVIGATION_SYSTEM27                7              
+FLASH_DRIVE         27                5              
+FLAVORED_DRINK_CONCENTRATE27                4              
+PICTURE_FRAME       26                7              
+SUGAR_CANDY         26                4              
+NON_DAIRY_CREAM     26                5              
+SELF_STICK_NOTE     26                7              
+GPS_OR_NAVIGATION_ACCESSORY25                6              
+ROASTING_PAN        25                4              
+RUG_PAD             24                6              
+CHARM               24                11             
+VEHICLE_MIRROR      24                5              
+KITCHEN_TOOLS       23                4              
+SKATEBOARD          23                5              
+DIETARY_SUPPLEMENTS 22                5              
+SAW_BLADE           22                3              
+LITTER_BOX          22                4              
+FURNITURE_LINER     22                6              
+MEDIA_STORAGE       22                6              
+LIP_BALM            21                5              
+DRINK_COASTER       21                4              
+HAIR_COLORING_AGENT 20                4              
+BREAD_MAKING_MACHINE20                4              
+BABY_BOTTLE         19                4              
+VACUUM_SEALER_MACHINE19                4              
+COUNTERTOP_BURNER   19                3              
+BADGE_HOLDER        18                4              
+BAKING_PAPER        18                4              
+ABIS_BOOK           18                4              
+SHELLFISH           18                3              
+HAIR_BRUSH          17                3              
+ARTIFICIAL_TREE     17                3              
+SPORT_TABLE_GAME    17                3              
+PORTABLE_TOOL_BOX   17                4              
+DEEP_FRYER          17                3              
+MASCARA             16                5              
+ANIMAL_COLLAR       16                2              
+COMPUTER_SPEAKER    16                2              
+FIGURINE            16                4              
+DISHWASHER          16                2              
+TWO_WAY_RADIO       15                3              
+SWEATBAND           15                18             
+MASSAGE_STICK       15                3              
+ELECTRONIC_DEVICE_DOCKING_STATION15                3              
+FUEL_PUMP           15                3              
+BOTTLE_OPENER       15                3              
+VIVARIUM            14                1              
+PROTEIN_DRINK       14                2              
+FASTENER_DRIVE_BIT  14                3              
+TELESCOPE           14                2              
+ABIS_VIDEO_GAMES    14                2              
+FISHING_EQUIPMENT   14                6              
+KNIFE_BLOCK_SET     14                2              
+GUITARS             14                2              
+DIGITAL_DEVICE_3    14                1              
+WALLPAPER           13                2              
+WRITING_PAPER       13                2              
+CALCULATOR          13                3              
+VEHICLE_LIGHT_ASSEMBLY13                3              
+SPORT_RACKET        12                2              
+EYEBROW_COLOR       12                4              
+PERCUSSION_INSTRUMENTS12                3              
+INFANT_TODDLER_CAR_SEAT12                2              
+SWING               12                1              
+OVERALLS            12                4              
+AIR_COMPRESSOR      12                2              
+WALKING_STICK       12                2              
+AIR_FRYER           12                2              
+DRINKING_STRAW      11                4              
+ICE_CUBE_TRAY       11                2              
+UTILITY_CART_WAGON  11                2              
+PUNCHING_BAG        11                3              
+NETWORK_INTERFACE_CONTROLLER_ADAPTER11                3              
+ROOM_DIVIDER        11                2              
+AIR_PUMP            11                2              
+SLOW_COOKER         10                2              
+WHEEL_CUTTER        10                2              
+NON_RIDING_TOY_VEHICLE10                2              
+ELECTRONIC_SWITCH   10                3              
+AMAZON_TABLET_ACCESSORY10                4              
+PINBOARD            10                2              
+COOKIE_CUTTER       10                2              
+ABIS_PET_PRODUCTS   10                5              
+VINE                10                2              
+FIREPLACE           9                 1              
+AUDIO_OR_VIDEO      9                 2              
+ROWING_MACHINE      9                 4              
+ARTIFICIAL_PLANT    9                 1              
+POWER_BANK          9                 2              
+TOY_BUILDING_BLOCK  9                 5              
+PET_TOY             9                 3              
+ROBOTIC_VACUUM_CLEANER9                 1              
+VEST                8                 8              
+HOME_ORGANIZERS_AND_STORAGE8                 1              
+HARDWARE_CLAMP_VISE 8                 1              
+SMALL_HOME_APPLIANCES8                 2              
+COSMETIC_POWDER     8                 1              
+COOKING_OVEN        8                 1              
+BLOOD_PRESSURE_MONITOR8                 1              
+GARLIC_PRESS        7                 1              
+AGRICULTURAL_SUPPLIES7                 1              
+DINNERWARE          7                 1              
+GOLF_CLUB           7                 1              
+CELLULAR_PHONE      7                 1              
+BLANKET             7                 1              
+VEHICLE_SAFETY_CAMERA7                 1              
+JEWELRY             6                 2              
+AUTO_CHEMICAL       6                 6              
+MONITOR             6                 1              
+SKIN_TREATMENT_MASK 6                 1              
+SURVEILANCE_SYSTEMS 6                 2              
+TRACK_SUIT          6                 2              
+KICK_SCOOTER        6                 1              
+SHOVEL_SPADE        6                 1              
+THICKENING_AGENT    6                 1              
+TABLETOP_GAME       6                 2              
+GAME_DICE           6                 1              
+SOUS_VIDE_MACHINE   6                 1              
+VIDEO_DEVICE        6                 1              
+DRILL               5                 1              
+WIRELESS_LOCKED_PHONE5                 1              
+MEASURING_CUP       5                 5              
+CAR_AUDIO_OR_THEATER5                 1              
+CUTTING_BOARD       5                 1              
+LEHENGA_CHOLI_SET   5                 1              
+AV_RECEIVER         5                 1              
+COMPUTER_COOLING_DEVICE5                 1              
+MECHANICAL_LIGHTER  5                 1              
+VEHICLE_SCAN_TOOL   5                 1              
+FOOD_DEHYDRATOR     5                 1              
+AIR_PURIFIER        5                 1              
+POWERSPORTS_VEHICLE_PART5                 1              
+OUTBUILDING         5                 1              
+CAMERA_FLASH        4                 3              
+SCANNER             4                 1              
+CYCLING_EQUIPMENT   4                 1              
+SCULPTURE           4                 1              
+WAIST_CINCHER       4                 1              
+REFRIGERATION_APPLIANCE4                 1              
+SECURITY_CAMERA     4                 2              
+CONDIMENT           4                 1              
+OTC_MEDICATION      4                 1              
+TREADMILL           4                 1              
+PAINT_BRUSH         3                 3              
+BAKEWARE            3                 1              
+PRINTER             3                 3              
+MEMORY_READER       3                 1              
+NETWORKING_ROUTER   3                 1              
+COMPUTER_INPUT_DEVICE_ACCESSORY2                 2              
+NECKTIE             2                 2              
+SKIN_FOUNDATION_CONCEALER2                 1              
+TERMINAL_BLOCK      1                 1              
+SUSPENDER           1                 1              
+STROLLER            1                 1              
+SLEEP_MASK          1                 1              
+AMAZON_BOOK_READER_ACCESSORY1                 1              
+TIMER               1                 1              
+DVD_PLAYER_OR_RECORDER1                 1              
+HAIRBAND            0                 3              

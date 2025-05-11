@@ -1,5 +1,5 @@
 Category-wise image count (sorted by count):
-CELLULAR_PHONE_CASE: 15195
+CELLULAR_PHONE_CASE: 15000
 GROCERY: 7453
 HOME_FURNITURE_AND_DECOR: 6101
 HOME: 5376
@@ -559,5 +559,5 @@ SKIN_FOUNDATION_CONCEALER: 1
 SLEEP_MASK: 1
 PROTEIN_DRINK: 1
 
-Total Images: 177375
+Total Images: 177180
 Number of Unique Product Types: 559
