@@ -1,0 +1,18 @@
+📊 Evaluation Metrics:
+✅ Exact Match (EM): 19.97%
+🤖 BERTScore - Precision: 0.9544
+🤖 BERTScore - Recall:    0.9345
+🤖 BERTScore - F1:        0.9435
+🔹 BLEU Score:            0.0369
+🔹 ROUGE-L:               0.2085
+🔹 METEOR:                0.1083
+🔹 Jaccard Similarity:    0.2044
+🔹 Sørensen–Dice Coefficient: 0.2067
+🔹 LCS Ratio:             0.2051
+🔹 Token-Level Overlap:   0.2044
+🔹 Fuzzy Matching Score:  0.3778
+🔹 VQA Accuracy:          19.97%
+🔹 Visual-Contextual Consistency Score (VCCS): 0.2043
+🔹 BARTScore:             -5.8681
+
+Total elapsed time: 15665.46 seconds
