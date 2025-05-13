@@ -15,4 +15,3 @@
 🔹 Visual-Contextual Consistency Score (VCCS): 0.1998
 🔹 BARTScore:             -5.8868
 
-Total elapsed time: 16068.00 seconds
