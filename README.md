@@ -228,7 +228,7 @@ This robust implementation strategy allowed us to navigate the complexities of A
 ![Part_12](https://github.com/user-attachments/assets/01dd7a5d-01cc-4280-a381-f00584c353d6)
 Here we Have included the top 2 parts/groups and bottom 2 parts/groups,The remaining Parts/Group Graphs Can be accessed at The above mentioned Path
 
-We successfully generated question-and-answer (Q&A) pairs for **177,180 images**, distributed across **559 categories**.
+We successfully generated question-and-answer (Q&A) pairs for **169659 images**, distributed across **559 categories**.
 * **Category Reduction**: We observed a slight reduction in the total number of categories from the initial 576. This can be attributed to multiple `image_id`s potentially sharing the same `product_type` but not being sampled, or some categories being excluded by the sampling algorithm if their count was extremely low and they didn't meet the minimum threshold after processing.
 * **Fairness in Distribution**: Crucially, the implemented sampling algorithm ensured that the number of images within each category was properly sampled according to our proportional tiered strategy, maintaining a fair and balanced representation across the diverse product types. The detailed summary of product types and their corresponding counts can be found in `/Data Curation/FinalGeneratedDataSummary/category_counts.txt`.
 
@@ -254,20 +254,21 @@ Upon analyzing the image distribution (as visually represented in the provided p
 **Dataset Statistics:**
 Following this strategy, we successfully extracted:
 * **34.1k JSON files** containing question-and-answer (Q&A) pairs for the **test set**.
-* The remaining **143k JSON files** formed the **train set**.
+* The remaining **135k JSON files** formed the **train set**.
 
 The screenshots illustrating this split can be found in `/Data Curation/train-test-split`.
 
 **Batching Strategy for Training Data:**
-Given the substantial size of the training dataset (143k JSON files), including them all in a single directory was not feasible for efficient model training and data loading. Therefore, we implemented a structured batching process:
+Given the substantial size of the training dataset (135k JSON files), including them all in a single directory was not feasible for efficient model training and data loading. Therefore, we implemented a structured batching process:
 
 * **Even Distribution**: The process evenly distributes `.json` files from multiple category folders (within `Batches/` directory, which is where the output of the data generation was stored) into smaller, manageable batches.
-* **Batch Size**: Each batch was capped at **10,000 files**.
+* **Batch Size**: Each batch was capped at approximately **10,000 files**.
 * **Round-Robin Approach**: To ensure each batch contained a balanced mix of files from all available categories and prevented class imbalance within individual batches, we employed a round-robin approach. The system first collected all `.json` files from each category folder, shuffled them to introduce randomness, and then iteratively built batches by taking one file at a time from each category in a rotating manner.
-* **Directory Structure**: Once a batch reached 10,000 files, it was moved into a newly created folder under `master_train/`. This process continued until all files were distributed, maintaining class diversity across all generated batches and preventing skewness in any single training batch.
+* **Directory Structure**: Once a batch reached approximately 10,000 files, it was moved into a newly created folder under `master_train/`. This process continued until all files were distributed, maintaining class diversity across all generated batches and preventing skewness in any single training batch.
 
-![image](https://github.com/user-attachments/assets/3ecc303c-d928-4cd4-914b-971eb98fc5a7)
+![WhatsApp Image 2025-05-13 at 12 38 40](https://github.com/user-attachments/assets/e613c652-ba68-45e1-94b5-499cd6716575)
 
+* We successfully divided the entire training set into 13 batches
 This comprehensive train-test splitting and batching strategy ensures a robust evaluation framework and an efficiently loadable training corpus for developing VQA models.
 
 ## 📦 Final Dataset Overview
