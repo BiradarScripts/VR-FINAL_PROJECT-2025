@@ -515,6 +515,15 @@ These results indicate the effectiveness of the fine-tuning process in improving
 # BLIP Model Fine-tuning for Visual Question Answering (VQA) Performance Analysis
 
 ## Detailed Results
+
+![1](https://github.com/user-attachments/assets/830f7142-0c6d-46b0-90b5-8493553f0582)
+Performance comparision of our 2 Best Models(V-7 and V-13)
+![44](https://github.com/user-attachments/assets/643c4656-da01-4923-a60a-0d9e0777c7e5)  
+![2](https://github.com/user-attachments/assets/476c9c23-934a-4ebc-b70a-3bef9c662b3a)
+![22](https://github.com/user-attachments/assets/d5817db2-b884-404b-a5a6-f7b0654f15ed)
+
+
+
 The detailed summary of evaluation metrics for each of the 13 versions and the baseline can be found in the directory: `/EvaluationMetrics/Results`.
 
 This Part summarizes the performance analysis of a BLIP model fine-tuned for Visual Question Answering (VQA) across 13 iterative versions. The fine-tuning process aimed to enhance the model's ability to understand visual content and generate accurate text-based answers to questions about images.
@@ -559,11 +568,6 @@ Performance was evaluated using a suite of metrics, providing a comprehensive vi
 * The final **v13** model successfully recovered from the v11/v12 dip, achieving performance very close to the peak (v7) and representing a substantial improvement over the baseline.
 
 The fine-tuning process successfully enhanced the BLIP model's VQA capabilities. The analysis across 13 versions demonstrated a clear positive trajectory, despite temporary dips. The final version (v13) achieved strong performance across all key metrics, significantly surpassing the original baseline and demonstrating the effectiveness of the fine-tuning dataset and process. Key performance indicators like VQA Accuracy, BERTScore F1, METEOR, ROUGE-L, and VCCS all reflect this overall positive trend with specific periods of rapid improvement, peak performance, temporary decline, and final recovery.
-
-(Example: Insert your batch-wise accuracy plot here or describe it. This plot would show accuracy on the Y-axis and Master Batch Number (1 to 14) on the X-axis.)
-
-
-
 
 ## 🧑‍💻 Team Members
 
