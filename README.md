@@ -463,22 +463,105 @@ Evaluating Visual Question Answering models requires a robust set of metrics tha
     * **Justification:** Offers a diagnostic tool to understand *what kind* of information the model is successfully transferring or generating compared to the ground truth. Helps in identifying specific areas of strength or weakness in the model's linguistic output related to the visual input.
 
 By employing this comprehensive set of metrics, we aim to provide a thorough and insightful evaluation of the base and fine-tuned BLIP models, highlighting their performance across various dimensions of VQA.
-   
 
-### Batch-wise Accuracy Improvement
-The strategy of iterative training on 14 master batches and validating on a global test set after each master batch allowed for tracking the model's improvement. A plot depicting the (Exact Match or other accuracy metric) vs. the number of master batches trained would show this progression. This demonstrated how the model's understanding improved as it was exposed to more diverse data sequentially.
+## Baseline Evaluation Results
+
+The evaluation of the base BLIP model yielded the following results across the 15 metrics:
+
+| Metric                            | Score     |
+| :-------------------------------- | :-------- |
+| ✅ Exact Match (EM)                 | 13.28%    |
+| 🤖 BERTScore - Precision          | 0.9487    |
+| 🤖 BERTScore - Recall             | 0.9310    |
+| 🤖 BERTScore - F1                 | 0.9388    |
+| 🔹 BLEU Score                     | 0.0248    |
+| 🔹 ROUGE-L                        | 0.1418    |
+| 🔹 METEOR                         | 0.0853    |
+| 🔹 Jaccard Similarity             | 0.1369    |
+| 🔹 Sørensen–Dice Coefficient      | 0.1387    |
+| 🔹 LCS Ratio                      | 0.1370    |
+| 🔹 Token-Level Overlap            | 0.1369    |
+| 🔹 Fuzzy Matching Score           | 0.2818    |
+| 🔹 VQA Accuracy                   | 13.28%    |
+| 🔹 Visual-Contextual Consistency Score (VCCS) | 0.1373    |
+| 🔹 BARTScore                      | -6.3153   |
+
+These results serve as a baseline to understand the performance of the foundational model before fine-tuning. Subsequent evaluations of the fine-tuned versions will be compared against these scores.
+
+## Final Fine-tuned Model Evaluation Results (Version 13)
+
+The final fine-tuned BLIP model (Version 13) demonstrated improved performance across the majority of the evaluation metrics compared to the baseline model. The results are as follows:
+
+| Metric                            | Score     |
+| :-------------------------------- | :-------- |
+| ✅ Exact Match (EM)                 | 20.53%    |
+| 🤖 BERTScore - Precision          | 0.9564    |
+| 🤖 BERTScore - Recall             | 0.9383    |
+| 🤖 BERTScore - F1                 | 0.9464    |
+| 🔹 BLEU Score                     | 0.0374    |
+| 🔹 ROUGE-L                        | 0.2143    |
+| 🔹 METEOR                         | 0.1105    |
+| 🔹 Jaccard Similarity             | 0.2091    |
+| 🔹 Sørensen–Dice Coefficient      | 0.2109    |
+| 🔹 LCS Ratio                      | 0.2093    |
+| 🔹 Token-Level Overlap            | 0.2091    |
+| 🔹 Fuzzy Matching Score           | 0.3840    |
+| 🔹 VQA Accuracy                   | 20.53%    |
+| 🔹 Visual-Contextual Consistency Score (VCCS) | 0.2094    |
+| 🔹 BARTScore                      | -5.8659   |
+
+These results indicate the effectiveness of the fine-tuning process in improving the model's ability to generate accurate and relevant answers for the VQA task, as captured by a diverse set of evaluation metrics.
+
+# BLIP Model Fine-tuning for Visual Question Answering (VQA) Performance Analysis
+
+## Detailed Results
+The detailed summary of evaluation metrics for each of the 13 versions and the baseline can be found in the directory: `/EvaluationMetrics/Results`.
+
+This Part summarizes the performance analysis of a BLIP model fine-tuned for Visual Question Answering (VQA) across 13 iterative versions. The fine-tuning process aimed to enhance the model's ability to understand visual content and generate accurate text-based answers to questions about images.
+The analysis reveals that the fine-tuning process resulted in a significant overall improvement in the BLIP model's VQA performance compared to the baseline. A clear trend of initial rapid gains, followed by fluctuations, a peak in performance, a subsequent dip, and a strong final recovery is observed across most key evaluation metrics.
+
+## Overall Trend
+
+The fine-tuning process effectively boosted the model's ability to answer visual questions. The performance, measured across various metrics, increased sharply from the baseline, reached a peak around version 7, experienced a temporary decline in versions 11 and 12, and then achieved near-peak performance in the final version (v13).
+
+## Key Metrics & Their Trends
+
+Performance was evaluated using a suite of metrics, providing a comprehensive view of the model's capabilities:
+
+* **VQA Accuracy / Exact Match (EM):**
+    * The most critical metric for VQA, showing a dramatic increase from **Baseline (13.28%)** to **v1 (18.42%)**.
+    * Accuracy climbed steadily, reaching its highest point at **v7 (20.72%)**.
+    * Performance then fluctuated (v8-v10), dipped significantly in **v11 (19.22%)**, and hit a low at **v12 (17.99%)**.
+    * The final **v13 (20.53%)** showed a strong recovery, closely approaching the v7 peak.
+
+* **Text Generation Metrics (BERTScore F1, ROUGE-L, METEOR, BLEU, Jaccard Similarity, Sørensen–Dice Coefficient, LCS Ratio, Token-Level Overlap, Fuzzy Matching):**
+    * These metrics evaluate the quality and overlap of generated answers with ground truth using various methods (semantic, n-gram, sequence, fuzzy matching).
+    * Collectively mirrored the VQA Accuracy/EM trend: significant increases from baseline to v1, improvement towards the **v7 peak** (often maxing out here), followed the v11/v12 dip, and showed strong recovery in **v13** to near-peak levels.
+    * **BERTScore F1** remained relatively high throughout (0.9388 baseline to 0.9477 peak), indicating the model quickly learned to generate semantically relevant answers.
+    * **Fuzzy Matching** showed slightly different peaks at **v3 (0.3812)** and **v13 (0.3840)**, suggesting improved handling of minor variations in these versions.
+
+* **Visual-Contextual Consistency Score (VCCS):**
+    * A VQA-specific metric assessing answer-visual context alignment.
+    * Followed a trend similar to VQA Accuracy/EM: improving from **Baseline (0.1373)**, peaking at **v7 (0.2117)**, dipping at **v12 (0.1836)**, and recovering strongly at **v13 (0.2094)**.
+    * Indicates improved ability to generate answers consistent with the image content.
+
+* **BARTScore:**
+    * Evaluates generation quality using a BART model (less negative is better).
+    * Improved from **Baseline (-6.3153)** to the **v7 peak (-5.8530)**.
+    * Followed the general trend of fluctuation and the dip in v11/v12 (becoming more negative).
+    * Showed a notable improvement in **v13 (-5.8659)**, returning to a value close to the peak.
+
+## Notable Observations
+
+* The initial fine-tuning step (Baseline to v1) provided the most significant single jump in performance across almost all metrics.
+* **Version 7** represents the overall best-performing model in this sequence, achieving the highest VQA Accuracy and peak values for many other generation metrics.
+* **Versions 11 and 12** show a clear regression in performance compared to earlier versions.
+* The final **v13** model successfully recovered from the v11/v12 dip, achieving performance very close to the peak (v7) and representing a substantial improvement over the baseline.
+
+The fine-tuning process successfully enhanced the BLIP model's VQA capabilities. The analysis across 13 versions demonstrated a clear positive trajectory, despite temporary dips. The final version (v13) achieved strong performance across all key metrics, significantly surpassing the original baseline and demonstrating the effectiveness of the fine-tuning dataset and process. Key performance indicators like VQA Accuracy, BERTScore F1, METEOR, ROUGE-L, and VCCS all reflect this overall positive trend with specific periods of rapid improvement, peak performance, temporary decline, and final recovery.
 
 (Example: Insert your batch-wise accuracy plot here or describe it. This plot would show accuracy on the Y-axis and Master Batch Number (1 to 14) on the X-axis.)
 
-
-### Evaluation Metrics
-The final evaluation of the model (e.g., model_latest_v8 trained on all 14 master batches) on the test dataset yielded the following (example values):
-
-- Exact Match (EM): XX.XX%
-- BERTScore - Precision: Y.YYYY
-- BERTScore - Recall: Z.ZZZZ
-- BERTScore - F1: A.AAAA
-- Inference Speed: BB.BB samples/sec
 
 
 
