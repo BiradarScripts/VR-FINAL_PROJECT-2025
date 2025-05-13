@@ -266,10 +266,9 @@ Given the substantial size of the training dataset (135k JSON files), including 
 * **Round-Robin Approach**: To ensure each batch contained a balanced mix of files from all available categories and prevented class imbalance within individual batches, we employed a round-robin approach. The system first collected all `.json` files from each category folder, shuffled them to introduce randomness, and then iteratively built batches by taking one file at a time from each category in a rotating manner.
 * **Directory Structure**: Once a batch reached approximately 10,000 files, it was moved into a newly created folder under `master_train/`. This process continued until all files were distributed, maintaining class diversity across all generated batches and preventing skewness in any single training batch.
 
-![image](https://github.com/user-attachments/assets/3ecc303c-d928-4cd4-914b-971eb98fc5a7)
+![WhatsApp Image 2025-05-13 at 12 38 40](https://github.com/user-attachments/assets/e613c652-ba68-45e1-94b5-499cd6716575)
 
 * We successfully divided the entire training set into 13 batches
-* 
 This comprehensive train-test splitting and batching strategy ensures a robust evaluation framework and an efficiently loadable training corpus for developing VQA models.
 
 ## 📦 Final Dataset Overview
