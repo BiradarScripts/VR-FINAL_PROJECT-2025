@@ -559,5 +559,5 @@ SKIN_FOUNDATION_CONCEALER: 1
 SLEEP_MASK: 1
 PROTEIN_DRINK: 1
 
-Total Images: 177180
+Total Images: 169659
 Number of Unique Product Types: 559
