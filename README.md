@@ -359,27 +359,209 @@ After the full iterative training cycle (or at intermediate stages after each ma
 - A VQADataset instance was created for the test data (e.g., from /kaggle/input/master-test/test_dataset).
 - A DataLoader was used for batching the test data.
 - Mixed-precision inference (autocast) was used for speed.
-### Metrics
-The following metrics were used for evaluation:
 
-- Exact Match (EM): The percentage of predicted answers that exactly match the ground truth answers after stripping leading/trailing whitespace and converting to lowercase.
-- BERTScore: An automatic evaluation metric that computes a similarity score between predicted and reference sentences using contextual embeddings from BERT. We reported Precision, Recall, and F1 BERTScore.
-The compute_metrics function (shown in the initial problem description) calculates simple accuracy, which could be used for the batch-wise accuracy validation mentioned. The final evaluation script calculates EM and BERTScore.
+### How Evaluation Works
 
-### Batch-wise Accuracy Improvement
-The strategy of iterative training on 14 master batches and validating on a global test set after each master batch allowed for tracking the model's improvement. A plot depicting the (Exact Match or other accuracy metric) vs. the number of master batches trained would show this progression. This demonstrated how the model's understanding improved as it was exposed to more diverse data sequentially.
+1.  **Initialization:**
+    * The model is set to evaluation mode (`model.eval()`).
+    * Gradient calculations are disabled (`torch.no_grad()`) for efficiency.
+    * Automatic Mixed Precision (`autocast`) is enabled if supported, reducing memory usage and potentially speeding up inference.
+    * Crucially, evaluation state (processed batch indices, collected predictions, correct/total counts) is loaded from a `resume_file` if it exists. Otherwise, evaluation starts fresh. Variables like `initial_batches_processed`, `processed_indices`, `predicted_all`, `true_all`, `correct`, and `total` are initialized or populated based on the loaded state.
+
+2.  **Iteration with Resume:**
+    * The code iterates through the batches provided by the `test_loader`.
+    * A `tqdm` progress bar is used to display progress, initialized to show the number of batches already processed (`initial_batches_processed`) from the resume state.
+    * For each `batch_idx`, a check is performed: `if batch_idx < initial_batches_processed:`. If true, this batch was processed in a previous run.
+    * If a batch is identified as already processed, `pbar.update()` is called to manually advance the progress bar, and `continue` skips the processing logic for this batch.
+
+3.  **Batch Processing (for unprocessed batches):**
+    * Input data (`pixel_values`, `input_ids`, `attention_mask`) is moved to the appropriate `device`.
+    * The model's `generate` method is called with the input data to produce `generated_ids`. Generation parameters (`max_length`, `do_sample=False`, `num_beams=1`) control the output.
+    * The `generated_ids` are decoded into human-readable strings (`predicted_answers`) using the `processor`.
+    * Ground truth `answers` (labels) are also decoded into strings (`decoded_answers`).
+
+4.  **Accuracy Calculation and Storage:**
+    * The code iterates through each sample within the current batch, comparing the predicted and true answers.
+    * Answers are cleaned by stripping whitespace and converting to lowercase (`.strip().lower()`) for case-insensitive comparison.
+    * The cleaned predicted and true answers are appended to `predicted_all` and `true_all` lists, respectively.
+    * If the cleaned predicted answer exactly matches the cleaned true answer, the `correct` counter is incremented.
+    * The `total` counter (representing total samples processed so far) is incremented.
+
+5.  **State Saving (Checkpointing):**
+    * The current `batch_idx` is added to the `processed_indices` set.
+    * The evaluation state is periodically saved to the specified `resume_file`. The saving condition triggers roughly every 1000 total samples processed (`total % 1000 < batch_size and total >= 1000`) and explicitly at the very end of the evaluation loop (`batch_idx == batch_count - 1`).
+    * The saved state includes the list of processed batch indices (`indices`), the accumulated predictions (`predicted`), true answers (`true`), and the current correct (`correct`) and total (`total`) counts, stored as a JSON object.
+
+## Evaluation Metrics
+
+Evaluating Visual Question Answering models requires a robust set of metrics that can capture the nuances of generating natural language answers based on visual input. The following metrics were used to provide a multifaceted analysis of the models' capabilities:
+
+### Standard Metrics
+
+* **Exact Match (EM)**
+    * **Indication:** Measures the percentage of generated answers that are an exact, character-for-character match to one of the ground truth reference answers.
+    * **Justification:** Essential for evaluating questions with definitive, short answers where precision is paramount. It provides a clear measure of the model's ability to produce factually correct and precisely phrased responses for specific queries.
+
+### Additional Metrics
+
+* **BERTScore - Precision**
+    * **Indication:** Quantifies how much of the generated answer is semantically similar to the reference answers, leveraging contextual embeddings from BERT. A higher score indicates that the model's output is relevant and avoids generating irrelevant information.
+    * **Justification:** Moves beyond simple word overlap to assess semantic equivalence. Crucial for VQA as valid answers can be phrased in multiple ways. It helps to penalize the inclusion of incorrect or unsubstantiated details in the generated response.
+
+* **BERTScore - Recall**
+    * **Indication:** Measures the extent to which the generated answer covers the information present in the reference answers, using BERT embeddings for semantic comparison. A higher score suggests the model is providing comprehensive answers that capture the key aspects of the ground truth.
+    * **Justification:** Important for evaluating responses to open-ended questions that may require describing multiple elements or aspects of the image. It assesses if the model is effectively extracting and presenting the relevant information from the visual context.
+
+* **BERTScore - F1**
+    * **Indication:** The harmonic mean of BERTScore Precision and Recall, offering a balanced measure of semantic similarity between the generated and reference answers.
+    * **Justification:** Provides a single, robust score that reflects the overall semantic overlap and relevance of the generated answer, accounting for both the precision of the generated content and the coverage of the reference information. Often considered a primary metric for semantic evaluation.
+
+* **BARTScore**
+    * **Indication:** Utilizes a pre-trained BART model to evaluate the quality of the generated text by assessing its likelihood within the BART language model, potentially capturing aspects like fluency, coherence, and factual consistency in a generation-aware manner.
+    * **Justification:** Offers a more advanced, model-based evaluation that goes beyond surface-level text matching. It can provide insights into the naturalness and quality of the generated language, which is important for user-facing VQA applications.
+
+* **BLEU Score**
+    * **Indication:** Measures the n-gram overlap between the generated answer and the reference answers, with a penalty for overly short generations. Primarily assesses the precision of word sequences.
+    * **Justification:** A traditional metric for evaluating text generation quality, particularly useful for assessing how well the model replicates common phrases and word combinations found in human-provided answers. While sensitive to exact phrasing, it offers a foundational measure of textual similarity.
+
+* **ROUGE-L**
+    * **Indication:** Focuses on the Longest Common Subsequence (LCS) between the generated and reference answers, measuring the overlap in the longest shared sequence of words, irrespective of their order. Provides an F1-like score based on LCS.
+    * **Justification:** Relevant for evaluating answers where the order of words might vary but the presence of a significant common sequence indicates shared content. Useful for assessing if the model captures the main informational flow or key phrases from the reference.
+
+* **METEOR**
+    * **Indication:** Calculates an alignment-based score considering exact word, stem, synonym, and paraphrase matches between the generated and reference answers. Designed to correlate better with human judgments than just n-gram overlap.
+    * **Justification:** Addresses the limitations of purely surface-level metrics by incorporating semantic equivalence through synonymy and paraphrasing. Provides a more human-like evaluation of answer correctness when there are variations in wording.
+
+* **Jaccard Similarity**
+    * **Indication:** Measures the ratio of the intersection to the union of the sets of unique tokens in the generated and reference answers. Indicates the degree of overlap in the vocabulary used.
+    * **Justification:** Offers a simple, set-based measure of token overlap. Useful for understanding the common words shared between the generated and ground truth answers, providing a basic indication of content overlap ignoring word order and frequency.
+
+* **Sørensen–Dice Coefficient**
+    * **Indication:** Another set-based metric ($2 \times |A \cap B| / (|A| + |B|)$) quantifying the overlap between the sets of tokens in the generated and reference answers. Similar to Jaccard Similarity but can be less sensitive to the size of the sets.
+    * **Justification:** Provides an alternative measure of token overlap, reinforcing the analysis of shared vocabulary between the model's output and the reference answers.
+
+* **LCS Ratio**
+    * **Indication:** The ratio of the length of the Longest Common Subsequence (LCS) to the length of the reference answer. Indicates the proportion of the reference answer's word sequence captured by the generated answer.
+    * **Justification:** A straightforward metric focusing specifically on the extent to which the generated answer preserves the order and content of the longest common sequence of words from the reference, offering insight into sequential overlap.
+
+* **Fuzzy Matching Score**
+    * **Indication:** Measures the similarity between strings that may contain minor differences, such as typos or slight variations in spelling. Scores are based on the number of edits required to match the strings.
+    * **Justification:** Important for VQA evaluation to account for potential minor errors in the model's output that do not fundamentally alter the correctness or meaning of the answer. Prevents penalizing models for small textual imperfections.
+
+* **VQA Accuracy**
+    * **Indication:** A standard VQA-specific metric that considers a generated answer correct if at least 3 out of 10 human annotators provided that answer as a ground truth.
+    * **Justification:** Developed to handle the inherent subjectivity and variability in VQA answers. It provides a more realistic assessment of performance by acknowledging that multiple valid answers can exist for a single image-question pair.
+
+### Proposed Metrics
+
+* **Visual-Contextual Consistency Score (VCCS)**
+    * **Indication:** A metric designed to evaluate how well the generated answer aligns not just with the text of the question and reference answers, but also with the visual content of the image. It aims to assess if the entities, attributes, and relationships mentioned in the answer are truly present and consistent with the image.
+    * **Justification:** Crucial for VQA, as it directly measures the model's ability to ground its linguistic response in the visual information. High VCCS indicates that the model is genuinely "seeing" and reasoning about the image to produce its answer, rather than just relying on language priors. This is vital for building reliable and trustworthy VQA systems.
+
+* **Token-Level Overlap**
+    * **Indication:** Provides a fine-grained analysis of the overlap between the generated and reference answers at the individual token level. This could involve categorizing overlapping tokens (e.g., by part of speech) or analyzing their distribution.
+    * **Justification:** Offers a diagnostic tool to understand *what kind* of information the model is successfully transferring or generating compared to the ground truth. Helps in identifying specific areas of strength or weakness in the model's linguistic output related to the visual input.
+
+By employing this comprehensive set of metrics, we aim to provide a thorough and insightful evaluation of the base and fine-tuned BLIP models, highlighting their performance across various dimensions of VQA.
+
+## Baseline Evaluation Results
+
+The evaluation of the base BLIP model yielded the following results across the 15 metrics:
+
+| Metric                            | Score     |
+| :-------------------------------- | :-------- |
+| ✅ Exact Match (EM)                 | 13.28%    |
+| 🤖 BERTScore - Precision          | 0.9487    |
+| 🤖 BERTScore - Recall             | 0.9310    |
+| 🤖 BERTScore - F1                 | 0.9388    |
+| 🔹 BLEU Score                     | 0.0248    |
+| 🔹 ROUGE-L                        | 0.1418    |
+| 🔹 METEOR                         | 0.0853    |
+| 🔹 Jaccard Similarity             | 0.1369    |
+| 🔹 Sørensen–Dice Coefficient      | 0.1387    |
+| 🔹 LCS Ratio                      | 0.1370    |
+| 🔹 Token-Level Overlap            | 0.1369    |
+| 🔹 Fuzzy Matching Score           | 0.2818    |
+| 🔹 VQA Accuracy                   | 13.28%    |
+| 🔹 Visual-Contextual Consistency Score (VCCS) | 0.1373    |
+| 🔹 BARTScore                      | -6.3153   |
+
+These results serve as a baseline to understand the performance of the foundational model before fine-tuning. Subsequent evaluations of the fine-tuned versions will be compared against these scores.
+
+## Final Fine-tuned Model Evaluation Results (Version 13)
+
+The final fine-tuned BLIP model (Version 13) demonstrated improved performance across the majority of the evaluation metrics compared to the baseline model. The results are as follows:
+
+| Metric                            | Score     |
+| :-------------------------------- | :-------- |
+| ✅ Exact Match (EM)                 | 20.53%    |
+| 🤖 BERTScore - Precision          | 0.9564    |
+| 🤖 BERTScore - Recall             | 0.9383    |
+| 🤖 BERTScore - F1                 | 0.9464    |
+| 🔹 BLEU Score                     | 0.0374    |
+| 🔹 ROUGE-L                        | 0.2143    |
+| 🔹 METEOR                         | 0.1105    |
+| 🔹 Jaccard Similarity             | 0.2091    |
+| 🔹 Sørensen–Dice Coefficient      | 0.2109    |
+| 🔹 LCS Ratio                      | 0.2093    |
+| 🔹 Token-Level Overlap            | 0.2091    |
+| 🔹 Fuzzy Matching Score           | 0.3840    |
+| 🔹 VQA Accuracy                   | 20.53%    |
+| 🔹 Visual-Contextual Consistency Score (VCCS) | 0.2094    |
+| 🔹 BARTScore                      | -5.8659   |
+
+These results indicate the effectiveness of the fine-tuning process in improving the model's ability to generate accurate and relevant answers for the VQA task, as captured by a diverse set of evaluation metrics.
+
+# BLIP Model Fine-tuning for Visual Question Answering (VQA) Performance Analysis
+
+## Detailed Results
+The detailed summary of evaluation metrics for each of the 13 versions and the baseline can be found in the directory: `/EvaluationMetrics/Results`.
+
+This Part summarizes the performance analysis of a BLIP model fine-tuned for Visual Question Answering (VQA) across 13 iterative versions. The fine-tuning process aimed to enhance the model's ability to understand visual content and generate accurate text-based answers to questions about images.
+The analysis reveals that the fine-tuning process resulted in a significant overall improvement in the BLIP model's VQA performance compared to the baseline. A clear trend of initial rapid gains, followed by fluctuations, a peak in performance, a subsequent dip, and a strong final recovery is observed across most key evaluation metrics.
+
+## Overall Trend
+
+The fine-tuning process effectively boosted the model's ability to answer visual questions. The performance, measured across various metrics, increased sharply from the baseline, reached a peak around version 7, experienced a temporary decline in versions 11 and 12, and then achieved near-peak performance in the final version (v13).
+
+## Key Metrics & Their Trends
+
+Performance was evaluated using a suite of metrics, providing a comprehensive view of the model's capabilities:
+
+* **VQA Accuracy / Exact Match (EM):**
+    * The most critical metric for VQA, showing a dramatic increase from **Baseline (13.28%)** to **v1 (18.42%)**.
+    * Accuracy climbed steadily, reaching its highest point at **v7 (20.72%)**.
+    * Performance then fluctuated (v8-v10), dipped significantly in **v11 (19.22%)**, and hit a low at **v12 (17.99%)**.
+    * The final **v13 (20.53%)** showed a strong recovery, closely approaching the v7 peak.
+
+* **Text Generation Metrics (BERTScore F1, ROUGE-L, METEOR, BLEU, Jaccard Similarity, Sørensen–Dice Coefficient, LCS Ratio, Token-Level Overlap, Fuzzy Matching):**
+    * These metrics evaluate the quality and overlap of generated answers with ground truth using various methods (semantic, n-gram, sequence, fuzzy matching).
+    * Collectively mirrored the VQA Accuracy/EM trend: significant increases from baseline to v1, improvement towards the **v7 peak** (often maxing out here), followed the v11/v12 dip, and showed strong recovery in **v13** to near-peak levels.
+    * **BERTScore F1** remained relatively high throughout (0.9388 baseline to 0.9477 peak), indicating the model quickly learned to generate semantically relevant answers.
+    * **Fuzzy Matching** showed slightly different peaks at **v3 (0.3812)** and **v13 (0.3840)**, suggesting improved handling of minor variations in these versions.
+
+* **Visual-Contextual Consistency Score (VCCS):**
+    * A VQA-specific metric assessing answer-visual context alignment.
+    * Followed a trend similar to VQA Accuracy/EM: improving from **Baseline (0.1373)**, peaking at **v7 (0.2117)**, dipping at **v12 (0.1836)**, and recovering strongly at **v13 (0.2094)**.
+    * Indicates improved ability to generate answers consistent with the image content.
+
+* **BARTScore:**
+    * Evaluates generation quality using a BART model (less negative is better).
+    * Improved from **Baseline (-6.3153)** to the **v7 peak (-5.8530)**.
+    * Followed the general trend of fluctuation and the dip in v11/v12 (becoming more negative).
+    * Showed a notable improvement in **v13 (-5.8659)**, returning to a value close to the peak.
+
+## Notable Observations
+
+* The initial fine-tuning step (Baseline to v1) provided the most significant single jump in performance across almost all metrics.
+* **Version 7** represents the overall best-performing model in this sequence, achieving the highest VQA Accuracy and peak values for many other generation metrics.
+* **Versions 11 and 12** show a clear regression in performance compared to earlier versions.
+* The final **v13** model successfully recovered from the v11/v12 dip, achieving performance very close to the peak (v7) and representing a substantial improvement over the baseline.
+
+The fine-tuning process successfully enhanced the BLIP model's VQA capabilities. The analysis across 13 versions demonstrated a clear positive trajectory, despite temporary dips. The final version (v13) achieved strong performance across all key metrics, significantly surpassing the original baseline and demonstrating the effectiveness of the fine-tuning dataset and process. Key performance indicators like VQA Accuracy, BERTScore F1, METEOR, ROUGE-L, and VCCS all reflect this overall positive trend with specific periods of rapid improvement, peak performance, temporary decline, and final recovery.
 
 (Example: Insert your batch-wise accuracy plot here or describe it. This plot would show accuracy on the Y-axis and Master Batch Number (1 to 14) on the X-axis.)
 
-
-### Evaluation Metrics
-The final evaluation of the model (e.g., model_latest_v8 trained on all 14 master batches) on the test dataset yielded the following (example values):
-
-- Exact Match (EM): XX.XX%
-- BERTScore - Precision: Y.YYYY
-- BERTScore - Recall: Z.ZZZZ
-- BERTScore - F1: A.AAAA
-- Inference Speed: BB.BB samples/sec
 
 
 
