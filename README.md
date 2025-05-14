@@ -1,4 +1,4 @@
-# 🚀 Multimodal Visual Question Answering with Amazon Berkeley Objects (ABO) Dataset
+   # 🚀 Multimodal Visual Question Answering with Amazon Berkeley Objects (ABO) Dataset
 
 ## Project Overview
 
@@ -363,12 +363,14 @@ The overall dataset was logically segmented into **14 distinct 'master' batches*
 
 2.  **Training on Master Batch N:** For each iteration, the model was fine-tuned exclusively on the data contained within the current 'Master Batch N'. The training was conducted using a standard deep learning loop: for each batch of data from the `VQADataset`, a forward pass was performed to obtain predictions, the loss (cross-entropy, as is typical for sequence generation tasks like VQA) was computed, gradients were calculated via backpropagation, and the model's trainable parameters were updated using the **AdamW optimizer** with a specified learning rate of **`lr` = 10e-5**.
 
-3.  **Checkpointing:** To ensure robustness against interruptions and to facilitate the iterative process, comprehensive checkpoints were saved regularly.
-    *   Periodically, after a set number of training steps (1000 steps), and definitively at the end of processing each master batch, the following were saved:
+3.  **Checkpointing and Model Versioning:** To ensure robustness against interruptions and to facilitate the iterative process, comprehensive checkpoints were saved regularly and versioned.
+    *   Periodically, after a set number of training steps (e.g., every 1000 steps, as indicated by the code comment `save_every = 1000`), and definitively at the end of processing each master batch, the following were saved to a designated directory:
         *   The model's fine-tuned weights and configuration files using `model.save_pretrained(save_path)`.
         *   The processor's configuration and tokenizer files using `processor.save_pretrained(save_path)`.
         *   A dedicated 'training state' file (`training_state.pt`) using `torch.save`. This critical file included the state of the optimizer (`optimizer.state_dict()`), the current training step counter (`step_counter`), and the history of recorded losses (`loss_history`). Saving the optimizer state and step counter is essential for seamlessly resuming training exactly where it left off, preventing loss of progress.
-    *   An example save path for the fine-tuned model and processor files was `/kaggle/working/model_latest_vN`, where 'vN' denotes the version corresponding to the processed batch. The training state was saved within this directory: `/kaggle/working/model_latest_vN/training_state.pt`.
+    *   Each time a master batch's training was completed and saved, the output directory was named following a versioning convention: `/kaggle/working/model_latest_vN`. The 'vN' denotes the version number, indicating that the model within this directory has been trained up to and *including* the data from Master Batch 'N'.
+    *   These versioned model checkpoints were then organized and stored within a **Kaggle dataset**. This centralized storage within a Kaggle dataset provided a convenient way to manage different iterations of the fine-tuned model, track progress across versions, and easily load a specific version as the starting point for subsequent training batches or for evaluation. The training state file (`training_state.pt`) was saved within the corresponding versioned model directory in the Kaggle working environment before being potentially included in the dataset.
+
 
 4.  **Global Validation:** Upon the successful completion of training on each individual master batch, the fine-tuned model's performance was evaluated on a **global test dataset**. This test set consisted of approximately **482,036 samples** (as indicated by your evaluation cell output) and remained constant throughout the iterative process. Validating on a separate, large test set allowed for monitoring the model's generalization capabilities and tracking the cumulative impact of training on each successive data batch across the entire problem space, rather than just the performance on the currently processed batch.
 
