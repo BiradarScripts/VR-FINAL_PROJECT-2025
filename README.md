@@ -344,7 +344,7 @@ The specific LoRA configuration used for fine-tuning was carefully chosen to bal
 *   **`r` = 8:** This parameter defines the **rank** of the low-rank update matrices (denoted as A and B). LoRA approximates the weight update matrix of a layer ($\Delta W$) by the product of two much smaller matrices, $A$ and $B$, where $\Delta W \approx BA$. The size of these matrices are $d \times r$ and $r \times k$ respectively, where $d \times k$ is the size of the original weight matrix $W$, and $r$ is the rank. A higher rank allows for a more expressive update but increases the number of trainable parameters ($r \times (d+k)$). A rank of 8 is a common starting point that generally provides a good balance between parameter efficiency and the ability to capture necessary adaptations.
 
 *   **`lora_alpha` = 32:** This is the **scaling factor** for the LoRA updates. The scaled update added to the original weight matrix is $(BA) \cdot (\text{lora\_alpha} / r)$. The `lora_alpha` parameter, in conjunction with `r`, determines the magnitude of the LoRA updates applied during fine-tuning. Using `lora_alpha = 32` with `r = 8` means the updates are scaled by a factor of $32 / 8 = 4$. This scaling helps to prevent the LoRA updates from being too small, especially when using a lower rank.
-
+  
 *   **`target_modules` = \[`'qkv'`, `'projection'`]:** This specifies which modules (layers) within the pre-trained BLIP model the LoRA matrices are injected into. `'qkv'` typically refers to the linear layers responsible for projecting the input embeddings into Query, Key, and Value vectors in the self-attention mechanism. `'projection'` likely refers to the output projection layer within the attention mechanism. Applying LoRA to these attention-related layers is a common and effective strategy because the attention mechanism is critical for the model's ability to understand relationships within the input (image features and text tokens) and generate contextually relevant outputs. Focusing fine-tuning on these layers allows the model to adapt its core understanding and generation capabilities to the new data.
 
 *   **`lora_dropout` = 0.05:** This sets the **dropout probability** applied to the outputs of the LoRA update matrices ($BA$) during training. Dropout is a regularization technique where, during each training step, a fraction of the outputs from a layer are randomly set to zero. Applying dropout to the LoRA updates helps to prevent overfitting by making the model less reliant on any single LoRA parameter, encouraging it to learn more robust representations. A value of 0.05 represents a small amount of dropout, indicating a light form of regularization.
@@ -364,29 +364,42 @@ The overall dataset was logically segmented into **14 distinct 'master' batches*
 2.  **Training on Master Batch N:** For each iteration, the model was fine-tuned exclusively on the data contained within the current 'Master Batch N'. The training was conducted using a standard deep learning loop: for each batch of data from the `VQADataset`, a forward pass was performed to obtain predictions, the loss (cross-entropy, as is typical for sequence generation tasks like VQA) was computed, gradients were calculated via backpropagation, and the model's trainable parameters were updated using the **AdamW optimizer** with a specified learning rate of **`lr` = 10e-5**.
 
 3.  **Checkpointing and Model Versioning:** To ensure robustness against interruptions and to facilitate the iterative process, comprehensive checkpoints were saved regularly and versioned.
+
     *   Periodically, after a set number of training steps (e.g., every 1000 steps, as indicated by the code comment `save_every = 1000`), and definitively at the end of processing each master batch, the following were saved to a designated directory:
+      
         *   The model's fine-tuned weights and configuration files using `model.save_pretrained(save_path)`.
         *   The processor's configuration and tokenizer files using `processor.save_pretrained(save_path)`.
+          
         *   A dedicated 'training state' file (`training_state.pt`) using `torch.save`. This critical file included the state of the optimizer (`optimizer.state_dict()`), the current training step counter (`step_counter`), and the history of recorded losses (`loss_history`). Saving the optimizer state and step counter is essential for seamlessly resuming training exactly where it left off, preventing loss of progress.
+          
     *   Each time a master batch's training was completed and saved, the output directory was named following a versioning convention: `/kaggle/working/model_latest_vN`. The 'vN' denotes the version number, indicating that the model within this directory has been trained up to and *including* the data from Master Batch 'N'.
+      
     *   These versioned model checkpoints were then organized and stored within a **Kaggle dataset**. This centralized storage within a Kaggle dataset provided a convenient way to manage different iterations of the fine-tuned model, track progress across versions, and easily load a specific version as the starting point for subsequent training batches or for evaluation. The training state file (`training_state.pt`) was saved within the corresponding versioned model directory in the Kaggle working environment before being potentially included in the dataset.
 
 
-4.  **Global Validation:** Upon the successful completion of training on each individual master batch, the fine-tuned model's performance was evaluated on a **global test dataset**. This test set consisted of approximately **482,036 samples** (as indicated by your evaluation cell output) and remained constant throughout the iterative process. Validating on a separate, large test set allowed for monitoring the model's generalization capabilities and tracking the cumulative impact of training on each successive data batch across the entire problem space, rather than just the performance on the currently processed batch.
+5.  **Global Validation:** Upon the successful completion of training on each individual master batch, the fine-tuned model's performance was evaluated on a **global test dataset**. This test set consisted of approximately **482,036 samples** (as indicated by your evaluation cell output) and remained constant throughout the iterative process. Validating on a separate, large test set allowed for monitoring the model's generalization capabilities and tracking the cumulative impact of training on each successive data batch across the entire problem space, rather than just the performance on the currently processed batch.
 
-5.  **Iteration Transition:** To move from training on 'Master Batch N' to 'Master Batch N+1', the `load_path` for the next training run was set to the `save_path` of the just-completed run. This ensured that the training for the next batch started from the weights and optimizer state of the model that had finished training on the previous batch. Concurrently, the `json_root_dir` in the dataset loading configuration was updated to point to the directory containing the data for 'Master Batch N+1'.
+6.  **Iteration Transition:** To move from training on 'Master Batch N' to 'Master Batch N+1', the `load_path` for the next training run was set to the `save_path` of the just-completed run. This ensured that the training for the next batch started from the weights and optimizer state of the model that had finished training on the previous batch. Concurrently, the `json_root_dir` in the dataset loading configuration was updated to point to the directory containing the data for 'Master Batch N+1'.
 
 This sequential training process on different data batches allowed the model to incrementally process and learn from the entire large dataset, effectively managing memory and computational resources. Furthermore, the periodic and end-of-batch checkpointing provided resilience and enabled continuous performance tracking via the global validation step, offering insights into how the model improved as it was exposed to more data over successive batches.
 
 
+### Performance Trends Across Iterations
 
-### Training Loop and Loss Visualization
-The training loop iterated through the train_loader for a fixed number of epochs (typically 1 for each master batch in the sequential training setup).
-Loss history (step vs. loss) was recorded and plotted to monitor training progress. Three types of loss plots were generated and saved after each major training phase (e.g., after processing a master batch):
+To monitor the effectiveness of the iterative fine-tuning process and understand how the model's performance evolved as it was exposed to data from each successive master batch, we tracked key evaluation metrics on the constant global test dataset after training was completed for each batch. This provides a clear visualization of the learning progress.
 
-- Raw Loss Plot: loss_plot_raw.png
-- Smoothed Loss Plot (using Gaussian filter): loss_plot_smoothed.png
-- Log-Scale Loss Plot: loss_plot_logscale.png
+The following graph illustrates the trend of two primary evaluation metrics: **Exact Match (EM)** and **BERTScore F1**, measured on the global test set after the model was fine-tuned up to and including the data from each respective master batch (from Batch 1 up to Batch 14). The performance of the base `blip-vqa-base` model *before* any fine-tuning serves as the initial baseline.
+
+![image](https://github.com/user-attachments/assets/34cbbe57-6e57-45cb-af3c-c094e0386f27)
+(See Figure: Performance Metrics Across Training Batches)
+
+As anticipated with successful fine-tuning, the graph shows a general **increasing trend** for both the Exact Match (EM) and BERTScore F1 metrics as the model is trained on more data across subsequent batches.
+*   **Exact Match (EM)** directly reflects the model's ability to produce answers that precisely match the ground truth. An increasing EM indicates that the model is becoming more precise in its factual recall and language generation for the specific VQA task.
+*   **BERTScore F1** measures the semantic similarity between the generated and ground truth answers, providing a more nuanced assessment of answer quality. A rising BERTScore F1 suggests that even when the generated answer isn't an exact match, its meaning is becoming progressively closer to the correct answer's meaning.
+
+This upward trend validates our iterative training strategy and demonstrates that training on each additional batch of data contributed positively to the model's overall performance and generalization capability on the unseen test set. The initial performance (Batch 0 or Base Model) serves as a valuable reference point to highlight the improvement gained through the fine-tuning process.
+
+
 
 
 ##  Evaluation
@@ -431,6 +444,11 @@ After the full iterative training cycle (or at intermediate stages after each ma
     * The current `batch_idx` is added to the `processed_indices` set.
     * The evaluation state is periodically saved to the specified `resume_file`. The saving condition triggers roughly every 1000 total samples processed (`total % 1000 < batch_size and total >= 1000`) and explicitly at the very end of the evaluation loop (`batch_idx == batch_count - 1`).
     * The saved state includes the list of processed batch indices (`indices`), the accumulated predictions (`predicted`), true answers (`true`), and the current correct (`correct`) and total (`total`) counts, stored as a JSON object.
+
+
+
+
+
 
 ## Evaluation Metrics
 
