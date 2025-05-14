@@ -1,8 +1,8 @@
-   # 🚀 Multimodal Visual Question Answering with Amazon Berkeley Objects (ABO) Dataset
+# 🚀 Multimodal Visual Question Answering with Amazon Berkeley Objects (ABO) Dataset
 
 ## Project Overview
 
-> This project focuses on developing a **Multimodal Visual Question Answering (VQA)** system using the rich **Amazon Berkeley Objects (ABO)** dataset. Our objective is to create a multiple-choice VQA dataset from ABO, establish and evaluate robust baseline models, and then significantly improve their performance through fine-tuning using the **Low-Rank Adaptation (LoRA)** technique. The ultimate goal is to build a high-performing VQA model capable of answering questions about visual data, which will be rigorously evaluated on a hidden dataset and an undisclosed metric.
+This project focuses on developing a **Multimodal Visual Question Answering (VQA)** system using the rich **Amazon Berkeley Objects (ABO)** dataset. Our objective is to create a multiple-choice VQA dataset from ABO, establish and evaluate robust baseline models, and then significantly improve their performance through fine-tuning using the **Low-Rank Adaptation (LoRA)** technique. The ultimate goal is to build a high-performing VQA model capable of answering questions about visual data, which will be rigorously evaluated on a hidden dataset and an undisclosed metric.
 
 ---
 
