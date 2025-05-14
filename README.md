@@ -459,56 +459,70 @@ Evaluating Visual Question Answering models requires a robust set of metrics tha
 * **Exact Match (EM)**
     * **Indication:** Measures the percentage of generated answers that are an exact, character-for-character match to one of the ground truth reference answers.
     * **Justification:** Essential for evaluating questions with definitive, short answers where precision is paramount. It provides a clear measure of the model's ability to produce factually correct and precisely phrased responses for specific queries.
+    * **Limitation for one-word VQA:** While suitable for questions with a single, unambiguous one-word answer, it harshly penalizes minor variations (e.g., singular vs. plural if not specified, or an equally valid synonym not present in the ground truth). It offers no partial credit for semantically very close but not identical single-word answers.
 
 ### Additional Metrics
 
 * **BERTScore - Precision**
     * **Indication:** Quantifies how much of the generated answer is semantically similar to the reference answers, leveraging contextual embeddings from BERT. A higher score indicates that the model's output is relevant and avoids generating irrelevant information.
     * **Justification:** Moves beyond simple word overlap to assess semantic equivalence. Crucial for VQA as valid answers can be phrased in multiple ways. It helps to penalize the inclusion of incorrect or unsubstantiated details in the generated response.
+    * **Limitation for one-word VQA:** For a single generated word, precision will largely indicate if that word is semantically aligned with the reference word(s). However, the complexity of BERT embeddings might be excessive for single-word comparisons and could potentially assign high precision to a semantically related but factually incorrect single word.
 
 * **BERTScore - Recall**
     * **Indication:** Measures the extent to which the generated answer covers the information present in the reference answers, using BERT embeddings for semantic comparison. A higher score suggests the model is providing comprehensive answers that capture the key aspects of the ground truth.
     * **Justification:** Important for evaluating responses to open-ended questions that may require describing multiple elements or aspects of the image. It assesses if the model is effectively extracting and presenting the relevant information from the visual context.
+    * **Limitation for one-word VQA:** If both generated and reference answers are single words, recall behaves very similarly to precision. If the model is expected to produce only one word, its ability to "cover" more information (which recall measures) is inherently limited, making this aspect less informative than for longer answers.
 
 * **BERTScore - F1**
     * **Indication:** The harmonic mean of BERTScore Precision and Recall, offering a balanced measure of semantic similarity between the generated and reference answers.
     * **Justification:** Provides a single, robust score that reflects the overall semantic overlap and relevance of the generated answer, accounting for both the precision of the generated content and the coverage of the reference information. Often considered a primary metric for semantic evaluation.
+    * **Limitation for one-word VQA:** Inherits limitations from BERTScore Precision and Recall for single words. While it balances semantic presence and relevance, it might still score a single, semantically similar but incorrect word highly. Its nuanced balancing act is more impactful for multi-word answers.
 
 * **BARTScore**
     * **Indication:** Utilizes a pre-trained BART model to evaluate the quality of the generated text by assessing its likelihood within the BART language model, potentially capturing aspects like fluency, coherence, and factual consistency in a generation-aware manner.
     * **Justification:** Offers a more advanced, model-based evaluation that goes beyond surface-level text matching. It can provide insights into the naturalness and quality of the generated language, which is important for user-facing VQA applications.
+    * **Limitation for one-word VQA:** Concepts like fluency and coherence are minimally applicable to single-word answers. BARTScore might favor common words over rare but correct single-word answers due to the language model's training distribution. Its strengths in evaluating the structure of generated text are underutilized for single tokens.
 
 * **BLEU Score**
     * **Indication:** Measures the n-gram overlap between the generated answer and the reference answers, with a penalty for overly short generations. Primarily assesses the precision of word sequences.
     * **Justification:** A traditional metric for evaluating text generation quality, particularly useful for assessing how well the model replicates common phrases and word combinations found in human-provided answers. While sensitive to exact phrasing, it offers a foundational measure of textual similarity.
+    * **Limitation for one-word VQA:** For single-word answers, BLEU (especially BLEU-1) essentially reduces to an exact match. Higher-order n-grams (BLEU-2, BLEU-3, BLEU-4) will typically be zero if the generated and reference answers are single words (unless they are identical), offering little discriminative power. The brevity penalty is also less relevant.
 
 * **ROUGE-L**
     * **Indication:** Focuses on the Longest Common Subsequence (LCS) between the generated and reference answers, measuring the overlap in the longest shared sequence of words, irrespective of their order. Provides an F1-like score based on LCS.
     * **Justification:** Relevant for evaluating answers where the order of words might vary but the presence of a significant common sequence indicates shared content. Useful for assessing if the model captures the main informational flow or key phrases from the reference.
+    * **Limitation for one-word VQA:** If both the generated and reference answers are single words, ROUGE-L effectively becomes a binary exact match (score 1 if identical, 0 otherwise). It cannot capture semantic similarity between different single words.
 
 * **METEOR**
     * **Indication:** Calculates an alignment-based score considering exact word, stem, synonym, and paraphrase matches between the generated and reference answers. Designed to correlate better with human judgments than just n-gram overlap.
     * **Justification:** Addresses the limitations of purely surface-level metrics by incorporating semantic equivalence through synonymy and paraphrasing. Provides a more human-like evaluation of answer correctness when there are variations in wording.
+    * **Limitation for one-word VQA:** While its ability to match synonyms is beneficial for single-word answers (making it more flexible than EM), the more complex aspects of METEOR like fragmentation and alignment penalties are less impactful for single words. It might give a good score to a synonym that is technically correct but not the most appropriate or common answer.
 
 * **Jaccard Similarity**
     * **Indication:** Measures the ratio of the intersection to the union of the sets of unique tokens in the generated and reference answers. Indicates the degree of overlap in the vocabulary used.
     * **Justification:** Offers a simple, set-based measure of token overlap. Useful for understanding the common words shared between the generated and ground truth answers, providing a basic indication of content overlap ignoring word order and frequency.
+    * **Limitation for one-word VQA:** For single-word answers, Jaccard Similarity becomes binary: it is 1 if the single generated word is identical to the single reference word, and 0 if they are different. It cannot distinguish between a completely unrelated word and a semantically close synonym.
 
 * **Sørensen–Dice Coefficient**
     * **Indication:** Another set-based metric ($2 \times |A \cap B| / (|A| + |B|)$) quantifying the overlap between the sets of tokens in the generated and reference answers. Similar to Jaccard Similarity but can be less sensitive to the size of the sets.
     * **Justification:** Provides an alternative measure of token overlap, reinforcing the analysis of shared vocabulary between the model's output and the reference answers.
+    * **Limitation for one-word VQA:** Similar to Jaccard Similarity, for single-word answers, this coefficient becomes 1 if the words are identical and 0 if they are different. It does not provide any partial credit for semantic similarity for non-identical single words.
 
 * **LCS Ratio**
     * **Indication:** The ratio of the length of the Longest Common Subsequence (LCS) to the length of the reference answer. Indicates the proportion of the reference answer's word sequence captured by the generated answer.
     * **Justification:** A straightforward metric focusing specifically on the extent to which the generated answer preserves the order and content of the longest common sequence of words from the reference, offering insight into sequential overlap.
+    * **Limitation for one-word VQA:** If the reference answer is a single word, the LCS ratio will be 1 for an exact match and 0 for any non-match. It offers no nuance for single words that might be semantically related but not identical.
 
 * **Fuzzy Matching Score**
     * **Indication:** Measures the similarity between strings that may contain minor differences, such as typos or slight variations in spelling. Scores are based on the number of edits required to match the strings.
     * **Justification:** Important for VQA evaluation to account for potential minor errors in the model's output that do not fundamentally alter the correctness or meaning of the answer. Prevents penalizing models for small textual imperfections.
+    * **Limitation for one-word VQA:** While useful for typos, it might incorrectly assign high similarity to single words that are orthographically close but semantically distinct (e.g., "horse" vs. "house"). For single-word answers, it's crucial that the "fuzziness" doesn't obscure actual incorrectness beyond minor misspellings of the correct word.
 
 * **VQA Accuracy**
     * **Indication:** A standard VQA-specific metric that considers a generated answer correct if at least 3 out of 10 human annotators provided that answer as a ground truth.
     * **Justification:** Developed to handle the inherent subjectivity and variability in VQA answers. It provides a more realistic assessment of performance by acknowledging that multiple valid answers can exist for a single image-question pair.
+    * **Limitation for one-word VQA:** If the pool of human-annotated answers for a given question primarily consists of specific single words, this metric might not fully credit an equally valid, synonymous single-word answer if that synonym wasn't provided by at least three annotators. Its effectiveness for unique one-word answers depends heavily on the diversity and exhaustiveness of the collected ground truth answers.
+
 
 ### Proposed Metrics
 
