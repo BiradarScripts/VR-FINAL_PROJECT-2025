@@ -282,12 +282,14 @@ We’ve carefully curated two high-quality datasets to ensure robust model train
 This dataset forms the backbone of our learning process. It contains well-labeled, diverse, and balanced data samples crucial for developing a high-performing model.
 
 🔗 [Access Master-Train Dataset](https://www.kaggle.com/datasets/biradar1913/master-train)
+🔗 [Access Master-Train(CSV) Dataset](https://www.kaggle.com/datasets/biradar1913/master-traincsv)
 
 ### 🧪 Test Set – `Master-Test`
 
 Our test set is designed to rigorously evaluate the model's generalization capabilities. It mirrors real-world scenarios to validate the model’s effectiveness post-training.
 
 🔗 [Access Master-Test Dataset](https://www.kaggle.com/datasets/biradar1913/master-test)
+🔗 [Access Master-Test(CSV) Dataset](https://www.kaggle.com/datasets/biradar1913/master-testcsv)
 
 ---
 
