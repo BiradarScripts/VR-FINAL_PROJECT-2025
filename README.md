@@ -296,50 +296,86 @@ Our test set is designed to rigorously evaluate the model's generalization capab
 
 # Model Fine-tuning with LoRA
 
-### Data Preparation and Loading
-
-A custom PyTorch `Dataset` class, `VQADataset`, was implemented to handle the loading and preprocessing of image-question-answer triplets.
-
-### `VQADataset` Class
-
-The `VQADataset` class is responsible for:
-- Scanning specified JSON directories for VQA data. Each JSON file is expected to contain an image path and a list of question-answer pairs.
-- Constructing the full image path by combining a base image directory with the relative path from the JSON file. It also handles specific path cleaning (e.g., removing `abo-images-small/` prefix).
-- Storing each image-question-answer triplet as a sample.
-- In the `__getitem__` method:
-    * Loading the image using Pillow and converting it to RGB.
-    * Processing the image and question using the BLIP processor. This includes tokenization, padding to `max_length=128`, and truncation.
-    * Tokenizing the answer using the BLIP processor's tokenizer, padding to `max_length=10`, and truncation.
-    * Ensuring outputs are PyTorch tensors and correctly formatted for the model.
+To enable a general-purpose Visual Question Answering model to perform well on our target domain, a crucial step is fine-tuning it on relevant data. This process involves adjusting the model's parameters to better understand the specific visual and linguistic patterns of the new task. To ensure this fine-tuning was efficient and resource-friendly, we leveraged Low-Rank Adaptation (LoRA). LoRA is a state-of-the-art technique that selectively updates only a small portion of the model's weights, providing a highly effective way to adapt large models like BLIP For Question Answering without the overhead of full fine-tuning. This section outlines the methodology and implementation details of applying LoRA to our pre-trained model.
 
 ### Base Model and Processor
 The foundation of the fine-tuning process was the Salesforce/blip-vqa-base model and its corresponding processor, loaded from Hugging Face Transformers.
 
+### Model Choices: Rationale for selected models and any alternatives considered
+
+The primary rationale for this choice is that BLIP is a state-of-the-art vision-language model specifically pre-trained on large datasets for joint image-text understanding and generation, including a VQA task. This provides a strong, purpose-built starting point for fine-tuning. While larger models like BLIP-2 variants (`blip-2.7b`, `blip-7b`) offer potentially higher performance due to their increased parameter counts, they also demand significantly more computational resources (GPU memory and processing power) and longer training times, which were key considerations for a course project with potentially limited hardware access. Alternatives like **CLIP**, while excellent for image-text contrastive learning and zero-shot classification, are primarily encoders and not directly designed for generating textual answers to questions. Implementing VQA with CLIP would require pairing it with a separate language model and developing a more complex architecture and fine-tuning setup for sequence generation, which was beyond the scope and complexity desired for this project. Therefore, `blip-vqa-base`, combined with the parameter-efficient LoRA fine-tuning technique, offered the optimal balance between performance, computational feasibility, and direct applicability to the VQA task.
+
+### Data Preparation and Loading
+
+Effective training of the Visual Question Answering (VQA) model requires structuring and preprocessing the image-question-answer data into a format compatible with the BLIP model architecture. For this purpose, a custom PyTorch `Dataset` class, named `VQADataset`, was developed.
+
+The dataset is organized with image files stored separately from their corresponding question-answer annotations. Annotations are provided in JSON files. Each JSON file contains metadata for an image, including its relative path (`image_path`), and a list of ai-generated question-answer pairs (`qa_pairs`) related to that image.
+
+### `VQADataset` Class
+
+The `VQADataset` class serves as the crucial interface between the raw dataset files and the PyTorch training/evaluation pipeline. Its primary responsibility is to efficiently load, process, and format the image-question-answer triplets into tensors that the BLIP VQA model can directly consume. This custom implementation provides flexibility in handling our specific data structure and preprocessing requirements.
+
+The class is designed to perform the following key functions:
+
+*   **Scanning Specified JSON Directories:** The dataset constructor (`__init__`) takes a list of directories (`json_dirs`) as input. It then recursively traverses these directories using `os.walk` to find all files ending with the `.json` extension. This allows the dataset to be built from multiple distributed annotation files, potentially organized into different batches or subsets. Each discovered JSON file is expected to contain the VQA annotations for a single image.
+
+*   **Processing JSON Data:** For every located JSON file, the class loads its content using `json.load`. It extracts the `image_path`, which typically contains a relative path to the corresponding image file, and the `qa_pairs` list, which holds multiple dictionaries, each representing a single question-answer pair (`question` and `answer` keys) for that image.
+
+*   **Constructing Full Image Paths:** Dataset annotations often use relative paths. The `VQADataset` class takes a `base_img_path` argument to the constructor. For each image entry in the JSON, it constructs the absolute path to the image file by joining the `base_img_path` and the relative `image_path`. A specific cleaning step is included to handle potential inconsistencies in the relative path string (e.g., removing a fixed prefix like `abo-images-small/` if present), ensuring that the constructed path correctly points to the image location within the dataset's image storage.
+
+*   **Storing Image-Question-Answer Samples:** The core data structure within the dataset object is a list named `self.samples`. Each element in this list is a dictionary representing a single VQA sample. This dictionary contains the fully constructed `image_path`, the `question` string, and the `answer` string for one specific question-answer pair associated with that image. By flattening the JSON structure into individual question-answer-image samples, we create a flexible dataset where each item directly corresponds to one prediction task for the model.
+
+*   **Preprocessing in `__getitem__`:** The `__getitem__` method is invoked by the PyTorch `DataLoader` to retrieve and preprocess a single sample at a given index.
+    *   **Image Loading and Formatting:** The image file specified by the sample's `image_path` is opened using the Pillow library. It is immediately converted to the `RGB` format (`.convert("RGB")`). This ensures that all images have a consistent three-channel structure, which is standard input for most vision models, regardless of their original format (e.g., grayscale).
+    *   **Multimodal Input Processing:** The BLIP processor (`processor` object, initialized outside the class) is the primary tool for transforming the raw image and question into numerical tensors suitable for the BLIP model. The processor handles both image transformations (such as resizing and normalization based on the pre-trained model's requirements) and text tokenization (converting the question string into a sequence of numerical token IDs). The `return_tensors="pt"` argument ensures the output is PyTorch tensors. Padding (`padding="max_length"`) and truncation (`truncation=True`) are applied to the tokenized question to ensure all input sequences have a uniform length of `max_length=128`. This is essential for efficient batch processing by the model.
+    *   **Answer Tokenization (Labels):** The correct answer string for the VQA sample is tokenized separately using the BLIP processor's tokenizer. Similar to the question, padding and truncation are applied to ensure the answer sequence has a fixed length of `max_length=10`. This tokenized answer sequence serves as the ground truth `labels` tensor that the model will be trained to generate.
+    *   **Tensor Formatting:** The output tensors from the processor, which initially have a batch dimension of size 1 (due to `return_tensors="pt"` processing a single sample), are squeezed using `.squeeze(0)` to remove this dimension. This is the expected format for individual samples within a `Dataset` when used with a `DataLoader` for batching. The `inputs_embeds` tensor, if generated by the processor, is explicitly removed as the BLIP model variant used here takes token IDs (`input_ids`) as input for the language part, not embeddings.
+
+By implementing these steps, the `VQADataset` class effectively bridges the gap between our raw data and the BLIP model, making the fine-tuning process straightforward within the PyTorch and Hugging Face Transformers ecosystems.
+
+
+
+
 ###  LoRA Configuration
-Low-Rank Adaptation (LoRA) was applied to make the fine-tuning process more efficient. The peft library from Hugging Face was used for this purpose.
+ We leveraged the `peft` library from Hugging Face, which provides a straightforward way to apply LoRA to models from the Transformers library.
 
-The LoRA configuration was as follows:
+The specific LoRA configuration used for fine-tuning was carefully chosen to balance efficiency and performance:
 
-- r=8: Rank of the LoRA matrices.
-- lora_alpha=32: Scaling factor for LoRA.
-- target_modules=['qkv', 'projection']: Modules in the BLIP model to which LoRA was applied.
-- lora_dropout=0.05: Dropout probability for LoRA layers.
-- bias='none': Bias terms were not trained with LoRA.
+*   **`r` = 8:** This parameter defines the **rank** of the low-rank update matrices (denoted as A and B). LoRA approximates the weight update matrix of a layer ($\Delta W$) by the product of two much smaller matrices, $A$ and $B$, where $\Delta W \approx BA$. The size of these matrices are $d \times r$ and $r \times k$ respectively, where $d \times k$ is the size of the original weight matrix $W$, and $r$ is the rank. A higher rank allows for a more expressive update but increases the number of trainable parameters ($r \times (d+k)$). A rank of 8 is a common starting point that generally provides a good balance between parameter efficiency and the ability to capture necessary adaptations.
+
+*   **`lora_alpha` = 32:** This is the **scaling factor** for the LoRA updates. The scaled update added to the original weight matrix is $(BA) \cdot (\text{lora\_alpha} / r)$. The `lora_alpha` parameter, in conjunction with `r`, determines the magnitude of the LoRA updates applied during fine-tuning. Using `lora_alpha = 32` with `r = 8` means the updates are scaled by a factor of $32 / 8 = 4$. This scaling helps to prevent the LoRA updates from being too small, especially when using a lower rank.
+
+*   **`target_modules` = \[`'qkv'`, `'projection'`]:** This specifies which modules (layers) within the pre-trained BLIP model the LoRA matrices are injected into. `'qkv'` typically refers to the linear layers responsible for projecting the input embeddings into Query, Key, and Value vectors in the self-attention mechanism. `'projection'` likely refers to the output projection layer within the attention mechanism. Applying LoRA to these attention-related layers is a common and effective strategy because the attention mechanism is critical for the model's ability to understand relationships within the input (image features and text tokens) and generate contextually relevant outputs. Focusing fine-tuning on these layers allows the model to adapt its core understanding and generation capabilities to the new data.
+
+*   **`lora_dropout` = 0.05:** This sets the **dropout probability** applied to the outputs of the LoRA update matrices ($BA$) during training. Dropout is a regularization technique where, during each training step, a fraction of the outputs from a layer are randomly set to zero. Applying dropout to the LoRA updates helps to prevent overfitting by making the model less reliant on any single LoRA parameter, encouraging it to learn more robust representations. A value of 0.05 represents a small amount of dropout, indicating a light form of regularization.
+
+*   **`bias` = `'none'`:** This parameter controls whether bias terms in the target modules are also fine-tuned. Setting `bias` to `'none'` means that only the weight matrices within the specified `target_modules` are modified via the LoRA updates ($BA$), while the bias vectors of those layers are kept frozen. This is a standard practice in LoRA as fine-tuning only the weights often yields sufficient performance improvements, further contributing to parameter efficiency.
+
+This specific LoRA configuration was chosen to efficiently adapt the BLIP VQA model, focusing the trainable parameters on key attention mechanisms with controlled scaling and mild regularization, thereby facilitating effective fine-tuning within the available computational constraints.
 
 ### Iterative Training Strategy
 
-The total dataset was divided into 14 master batches. The fine-tuning process was iterative:
+Given the substantial size of the complete VQA dataset, fine-tuning the BLIP model in a single pass over all data presented significant computational and memory challenges. To address this, a multi-stage, **iterative training strategy** was implemented. This approach involved dividing the dataset into smaller, manageable chunks and training the model sequentially on these batches, building upon the learning from previous stages.
 
-- Initial State: Started with the base blip-vqa-base model or a previously fine-tuned checkpoint.
-- Train on Master Batch N: The model was trained on one master batch of data (e.g., batch_1). The training script utilized a standard loop with loss computation, backpropagation, and optimizer steps (optim.AdamW with lr=10e-5).
-- Checkpointing: During training on a master batch, model weights, processor files, and the training state (optimizer state, current step, loss history) were saved periodically (e.g., every 1000 steps) and at the end of training on that batch. This allowed for resuming training if interrupted and for loading the model for the next iteration.
-- Save path example: /kaggle/working/model_latest_vN
-- Resume state path example: /kaggle/working/model_latest_vN/training_state.pt
+The overall dataset was logically segmented into **14 distinct 'master' batches**. The fine-tuning process proceeded as follows:
 
-- Global Validation: After training on each master batch, the model's performance was validated on a global test dataset (approx. 40k images). This allowed tracking of accuracy improvement as the model saw more data.
+1.  **Initialization:** Training commenced either from the base pre-trained `blip-vqa-base` model checkpoint (for the very first batch) or by loading the weights and configuration from the fine-tuned model checkpoint saved at the completion of the *previous* master batch's training. This allowed the model to continue learning and adapting from its most recent state.
 
-- Iterate: The saved model and optimizer states from training on master batch N became the starting point for training on master batch N+1. The load_path was updated to the save_path of the previous iteration, and the json_root_dir was updated to the next master batch directory.
-- This sequential training on different data batches allowed the model to gradually learn from the entire dataset while managing resources and enabling incremental checkpointing and evaluation.
+2.  **Training on Master Batch N:** For each iteration, the model was fine-tuned exclusively on the data contained within the current 'Master Batch N'. The training was conducted using a standard deep learning loop: for each batch of data from the `VQADataset`, a forward pass was performed to obtain predictions, the loss (cross-entropy, as is typical for sequence generation tasks like VQA) was computed, gradients were calculated via backpropagation, and the model's trainable parameters were updated using the **AdamW optimizer** with a specified learning rate of **`lr` = 10e-5**.
+
+3.  **Checkpointing:** To ensure robustness against interruptions and to facilitate the iterative process, comprehensive checkpoints were saved regularly.
+    *   Periodically, after a set number of training steps (1000 steps), and definitively at the end of processing each master batch, the following were saved:
+        *   The model's fine-tuned weights and configuration files using `model.save_pretrained(save_path)`.
+        *   The processor's configuration and tokenizer files using `processor.save_pretrained(save_path)`.
+        *   A dedicated 'training state' file (`training_state.pt`) using `torch.save`. This critical file included the state of the optimizer (`optimizer.state_dict()`), the current training step counter (`step_counter`), and the history of recorded losses (`loss_history`). Saving the optimizer state and step counter is essential for seamlessly resuming training exactly where it left off, preventing loss of progress.
+    *   An example save path for the fine-tuned model and processor files was `/kaggle/working/model_latest_vN`, where 'vN' denotes the version corresponding to the processed batch. The training state was saved within this directory: `/kaggle/working/model_latest_vN/training_state.pt`.
+
+4.  **Global Validation:** Upon the successful completion of training on each individual master batch, the fine-tuned model's performance was evaluated on a **global test dataset**. This test set consisted of approximately **482,036 samples** (as indicated by your evaluation cell output) and remained constant throughout the iterative process. Validating on a separate, large test set allowed for monitoring the model's generalization capabilities and tracking the cumulative impact of training on each successive data batch across the entire problem space, rather than just the performance on the currently processed batch.
+
+5.  **Iteration Transition:** To move from training on 'Master Batch N' to 'Master Batch N+1', the `load_path` for the next training run was set to the `save_path` of the just-completed run. This ensured that the training for the next batch started from the weights and optimizer state of the model that had finished training on the previous batch. Concurrently, the `json_root_dir` in the dataset loading configuration was updated to point to the directory containing the data for 'Master Batch N+1'.
+
+This sequential training process on different data batches allowed the model to incrementally process and learn from the entire large dataset, effectively managing memory and computational resources. Furthermore, the periodic and end-of-batch checkpointing provided resilience and enabled continuous performance tracking via the global validation step, offering insights into how the model improved as it was exposed to more data over successive batches.
+
 
 
 ### Training Loop and Loss Visualization
