@@ -128,9 +128,9 @@ Upon analyzing the distribution of the 147,702 product listings with multilingua
 
 **Key Observations:**
 
-* **Dominance of a Single Category**: The `CELLULAR_PHONE_CASE` category dominates the dataset overwhelmingly with about 64,853 entries, representing almost 43% of the entire dataset. This indicates a strong skew where one type of product covers a large proportion of data.
+* **Dominance of a Single Category**: The `CELLULAR_PHONE_CASE` category dominates the dataset overwhelmingly with about 64,853 Listings and 281796 images, representing almost 43% of the entire Listing dataset and 70.7% of total images. This indicates a strong skew where one type of product covers a large proportion of data.
   
-* **Extreme Long Tail**: Conversely, many product categories have fewer than 5 listings under each category, accounting for a combined total of only 0.0033% of the entire dataset.
+* **Extreme Long Tail**: Conversely, many product categories have fewer than 5 listings under each category, accounting for a combined total of only 0.0033% of the entire listing dataset or even close to 0% of total images.
   
 * **Implications**: These radical imbalances in category representation can bring in substantial bias into model training. A model trained from this unbalanced dataset would then perform highly skewed on more represented classes (such as `CELLULAR_PHONE_CASE`) compared to underperforming on classes with few samples. This undermines the model's ability to generalize and maintain fair performance on a broad spectrum of product types.
 
@@ -138,7 +138,7 @@ In order to have a more representative and balanced dataset, it was important to
 
 ## Sampling Strategy: Proportional Tiered Sampling Algorithm
 
-The extreme class imbalance, where a tiny group of classes (e.g., `CELLULAR_PHONE_CASE` with ~150,000 distinct images or 64,853 product listings) has a huge majority, while most have between 1 and 2 samples, was a major challenge. For this, we implemented a **Proportional Tiered Sampling Algorithm**. This method of sampling selected listings from every product type by the frequency of that product type to result in a balanced and representative training set without losing useful data from any category.
+The extreme class imbalance, where a tiny group of classes (e.g., `CELLULAR_PHONE_CASE` with 281796 distinct images or 64,853 product listings) has a huge majority, while most have between 1 and 2 samples, was a major challenge. For this, we implemented a **Proportional Tiered Sampling Algorithm**. This method of sampling selected listings from every product type by the frequency of that product type to result in a balanced and representative training set without losing useful data from any category.
 
 ## Proportional Tiered Sampling Algorithm
 
