@@ -660,17 +660,17 @@ The fine-tuning process actually improved the model's performance on vision ques
 Performance was evaluated using a suite of measures to provide a general sense of the model's abilities:
 
 * **VQA Accuracy / Exact Match (EM):**
-* Most critical VQA metric, with sharp increase from **Baseline (13.28%)** to **v1 (18.42%)**.
-* Accuracy improved consistently up to its highest point at **v7 (20.72%)**.
-* The performance changed then (v8-v10), plummeted in **v11 (19.22%)**, and hit a low in **v12 (17.99%)**.
-* The last **v13 (20.53%)** was a strong rebound, almost up to the v7 top.
+   * Most critical VQA metric, with sharp increase from **Baseline (13.28%)** to **v1 (18.42%)**.
+   * Accuracy improved consistently up to its highest point at **v7 (20.72%)**.
+   * The performance changed then (v8-v10), plummeted in **v11 (19.22%)**, and hit a low in **v12 (17.99%)**.
+   * The last **v13 (20.53%)** was a strong rebound, almost up to the v7 top.
 
 
 * **Text Generation Metrics (BERTScore F1, ROUGE-L, METEOR, BLEU, Jaccard Similarity, Sørensen–Dice Coefficient, LCS Ratio, Token-Level Overlap, Fuzzy Matching):**
-* These tests evaluate the quality and overlap of generated answers with reality by employing various methods (semantic, n-gram, sequence, fuzzy matching).
-* Tracked the VQA Accuracy/EM trend individually: big leaps from baseline to v1, up to the **v7 peak** (often peaking here), followed the v11/v12 decline, and showed strong recovery in **v13** to almost-peak levels.
-* **BERTScore F1** was fairly consistent throughout (0.9388 baseline to 0.9477 peak), reflecting that the model learned very fast to create semantically appropriate responses.
-* **Fuzzy Matching** had peaks at somewhat different **v3 (0.3812)** and **v13 (0.3840)**, indicating better management of small differences between these versions.
+   * These tests evaluate the quality and overlap of generated answers with reality by employing various methods (semantic, n-gram, sequence, fuzzy matching).
+   * Tracked the VQA Accuracy/EM trend individually: big leaps from baseline to v1, up to the **v7 peak** (often peaking here), followed the v11/v12 decline, and showed strong recovery in **v13** to almost-peak levels.
+   * **BERTScore F1** was fairly consistent throughout (0.9388 baseline to 0.9477 peak), reflecting that the model learned very fast to create semantically appropriate responses.
+   * **Fuzzy Matching** had peaks at somewhat different **v3 (0.3812)** and **v13 (0.3840)**, indicating better management of small differences between these versions.
 
 
 * **Visual-Contextual Consistency Score (VCCS):** * A VQA-specific metric measuring answer-visual context consistency. * Followed a trend similar to VQA Accuracy/EM: increasing from **Baseline (0.1373)** to a high of **v7 (0.2117)**, decreasing at **v12 (0.1836)**, and then increasing well at **v13 (0.2094)**. * Refers to increased ability to generate responses in accordance with image content.
