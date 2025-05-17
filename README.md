@@ -593,11 +593,10 @@ These results indicate the effectiveness of the fine-tuning process in improving
 
 Performance comparision of our 2 Best Models(V-7 and V-13)
 
+![Unknown](https://github.com/user-attachments/assets/92934dc6-cfef-4749-b0f8-87f70598f9bd)
 
-![44](https://github.com/user-attachments/assets/643c4656-da01-4923-a60a-0d9e0777c7e5)  
 
-
-![2](https://github.com/user-attachments/assets/476c9c23-934a-4ebc-b70a-3bef9c662b3a)
+![Unknown-2](https://github.com/user-attachments/assets/7f0b31e2-76c1-4cdc-8839-f7f2d6db9e7a)
 
 
 ![22](https://github.com/user-attachments/assets/d5817db2-b884-404b-a5a6-f7b0654f15ed)
