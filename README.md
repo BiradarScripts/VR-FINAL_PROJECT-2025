@@ -50,6 +50,7 @@ This archive contains downscaled (maximum 256 pixels) catalog images and their a
           
         * `path`: The relative location of the image file within the `images/small/` directories. This path is composed of lowercase hexadecimal characters (`0-9a-f`), which also uniquely identify the images.  By creating a hierarchical file structure with the first two characters of the "image_id," directory management can be improved by reducing the number of images in each directory. The majority of images are in `.jpg` format, with a few exceptions in `.png`.
 
+
 * **`abo-images-small/images/small/`**:
     * The directory containing the actual image files. As mentioned image paths follow a two character hexadecimal hierarchy.
 
@@ -69,11 +70,15 @@ This archive comprises product listings and their corresponding metadata, provid
 
         * `fabric_type`: The fabric of the product which is described (e.g. “Cotton, Polyester”)
 
-        * “finish_type”: a text describing how a product has been finished like matte or glossy.        * `item_shape`: The form of the product described (such as “square”, “rectangle”) .
+        * `finish_type`: a text describing how a product has been finished like matte or glossy.
+ 
+        * `item_shape`: The form of the product described (such as “square”, “rectangle”) .
 
         * `material`: Description of the material of the item (e.g. Plastic , Metal).
 
-        * "pattern": the design of the product like Striped and Floral.        * `product_description`: Descriptive information of the product which is text and embedded in html.
+        * `pattern`: the design of the product like Striped and Floral.
+ 
+        * `product_description`: Descriptive information of the product which is text and embedded in html.
 
         * `product_type`: Category or class of the product (e.g CELLULAR_PHONE_CASE, BACKPACK).
 
@@ -90,6 +95,7 @@ The data curation process was carefully designed to transform the raw ABO data i
 
 1.  **Initial Data Processing & Filtering**:
     * The first step involved parsing the 16 `.json` files within `abo-listings/listings/metadata/`. Each file contained multiple JSON objects, not encased in a list, necessitating initial parsing to wrap them into a standard JSON list for easier programmatic access.
+    * Then we removed the sub-fields which have non-english i.e !(language_tag==es_US) type language_tag as gemini might misinterpret this while generating the Q-A pairs, even if we missde few cases, we added an additional check point/filter in the prompt aswell to handle this very carefully.
     * Subsequently, we filtered out irrelevant fields from each JSON object, retaining only the 12 fields listed above (e.g., `bullet_point`, `color`, `material`, `product_type`, `main_image_id`, `other_image_id`). This reduced noise and focused on attributes critical for VQA question generation.
 
 
@@ -123,7 +129,9 @@ Upon analyzing the distribution of the 147,702 product listings with multilingua
 **Key Observations:**
 
 * **Dominance of a Single Category**: The `CELLULAR_PHONE_CASE` category dominates the dataset overwhelmingly with about 64,853 entries, representing almost 43% of the entire dataset. This indicates a strong skew where one type of product covers a large proportion of data.
+  
 * **Extreme Long Tail**: Conversely, many product categories have fewer than 5 listings under each category, accounting for a combined total of only 0.0033% of the entire dataset.
+  
 * **Implications**: These radical imbalances in category representation can bring in substantial bias into model training. A model trained from this unbalanced dataset would then perform highly skewed on more represented classes (such as `CELLULAR_PHONE_CASE`) compared to underperforming on classes with few samples. This undermines the model's ability to generalize and maintain fair performance on a broad spectrum of product types.
 
 In order to have a more representative and balanced dataset, it was important to have a strong sampling strategy in place that would normalize the product type distribution, ensuring diversity and avoiding model bias.
@@ -136,16 +144,18 @@ The extreme class imbalance, where a tiny group of classes (e.g., `CELLULAR_PHON
 
 The algorithm proportionally samples product listings through a **logarithmic scaling function**. The architecture guarantees:
 * **Preservation of Rare Classes**: Product types with extremely few listings are completely retained to ensure diversity.
+  
 * **Smooth Downsampling of Common Classes**: Moderately frequent categories are downsampled according to their logarithmic scale, avoiding moderate overrepresentation.
+  
 * **Capping of Dominant Classes**: These classes with very high frequencies are capped at a maximum number of samples in order to avoid too much bias towards them.
 
 ### Sampling Formula
 
 For every product type $c$ with $N_c$ instances, the number of samples to be kept $S_c$ is calculated by applying the following formula:
 
-$
-S_c = \min\left(\max\left(k, \log_{10}(N_c) \cdot k \cdot \alpha\right), M\right)
-$
+$$
+S_c = \min\left( \max\left( k, \log_{10}(N_c) \cdot k \cdot \alpha \right),\ M \right)
+$$
 
 Where:
 * $k$: Small number of samples to keep from each class (e.g., 1). This makes even the most infrequent classes contribute to the set.
@@ -168,7 +178,7 @@ The prompt, stored in `/DataCuration/MainCode/Prompt.txt`, was carefully designe
 
 **Key Considerations in Prompt Design:**
 
-* **Holistic Understanding**: The question prompted the Gemini model to combine information from the image (visual features such as shape, color, pattern) with the metadata given (e.g., `bullet_point`, `material`, `product_description`).
+* **Complete Understanding**: The question prompted the Gemini model to combine information from the image (visual features such as shape, color, pattern) with the metadata given (e.g., `bullet_point`, `material`, `product_description`).
 * **Diversity of Question Types**: Questions were posed to examine a range of different aspects, including:
     * **Object Recognition**: "What is the central object in the image?"
     * **Spatial Relationships**: "Where is the handle on the bag?"
