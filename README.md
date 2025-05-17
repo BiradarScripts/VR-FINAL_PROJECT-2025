@@ -140,37 +140,82 @@ In order to have a more representative and balanced dataset, it was important to
 
 The extreme class imbalance, where a tiny group of classes (e.g., `CELLULAR_PHONE_CASE` with ~150,000 distinct images or 64,853 product listings) has a huge majority, while most have between 1 and 2 samples, was a major challenge. For this, we implemented a **Proportional Tiered Sampling Algorithm**. This method of sampling selected listings from every product type by the frequency of that product type to result in a balanced and representative training set without losing useful data from any category.
 
-### Algorithm Description
+## Proportional Tiered Sampling Algorithm
 
-The algorithm proportionally samples product listings through a **logarithmic scaling function**. The architecture guarantees:
-* **Preservation of Rare Classes**: Product types with extremely few listings are completely retained to ensure diversity.
-  
-* **Smooth Downsampling of Common Classes**: Moderately frequent categories are downsampled according to their logarithmic scale, avoiding moderate overrepresentation.
-  
-* **Capping of Dominant Classes**: These classes with very high frequencies are capped at a maximum number of samples in order to avoid too much bias towards them.
+## Step 1: Define Category Tiers Based on Number of Images
 
-### Sampling Formula
+| Tier   | Description      | Number of Images per Category                |
+|--------|------------------|---------------------------------------------|
+| Tier 1 | Very Large       | 100,000 images or more                       |
+| Tier 2 | Large            | 10,000 to less than 100,000 images           |
+| Tier 3 | Medium           | 1,000 to less than 10,000 images              |
+| Tier 4 | Small            | Less than 1,000 images                         |
 
-For every product type $c$ with $N_c$ instances, the number of samples to be kept $S_c$ is calculated by applying the following formula:
 
+## Step 2: Assign Sampling Ratios Per Tier
+
+| Tier   | Sampling Ratio                  |
+|--------|--------------------------------|
+| Tier 1 | Sample 5% (0.05) of images     |
+| Tier 2 | Sample 20% (0.20) of images    |
+| Tier 3 | Sample 50% (0.50) of images    |
+| Tier 4 | Sample 100% or at least 100 images (oversample if needed) |
+
+
+## Step 3: Apply Maximum Sample Cap
+
+To control the total dataset size, apply a **maximum sample cap** per category. For example:
+
+- Maximum samples per category \( M = 15,000 \)
+
+
+## Step 4: Calculate Final Number of Samples per Category
+
+For each category:
+
+1. **Determine its Tier** based on the total number of images.
+
+2. **Calculate base samples** using the tier’s sampling ratio.
+
+3. **Adjust sample size using a logarithmic scaling factor** (optional) to balance sampling:
+
+   $$
+\text{Adjusted samples} = \left( \log_{10}(\text{Category Size}) \times \alpha + \text{Sampling Ratio} \right) \times \text{Category Size}
 $$
-S_c = \min\left( \max\left( k, \log_{10}(N_c) \cdot k \cdot \alpha \right),\ M \right)
-$$
 
-Where:
-* $k$: Small number of samples to keep from each class (e.g., 1). This makes even the most infrequent classes contribute to the set.
-* $\\alpha$: Scaling parameter (e.g., 2.5) which scales the effect of the log scaling. An increased $\\alpha$ results in a larger number of samples being kept as $N_c$ grows.
-* $M$: Maximum number of samples cap (e.g., 15,000). It avoids dominating classes overpopulating the dataset, even after logarithmic scaling.
-* $N_c$: Number of raw samples in class $c$.
-* $S_c$: Final number of samples to retain from class $c$.
 
-### Key Properties
 
-* **Rare classes** (where $N_c \leq k$) are kept intact, which means the model is being presented with a broad range of product types, including those with few examples.
-* **Common classes** (with frequencies in the middle) are downsampled according to the logarithmic scale so that there's a controlled reduction in their representation while still recognizing their greater frequency.
-* **Dominant classes** (having high frequencies) are capped to avoid excessive bias so that the model does not overfit these highly frequent categories.
+   - Here, \( alpha ) is a scaling factor (e.g., between 0.1 and 1) to fine-tune sampling.
+
+4. **Ensure minimum samples** (e.g., at least 1 sample per category).
+
+5. **Limit samples to the maximum cap** \( M \).
+
+6. **For Tier 4 categories (small categories):**  
+   If category size is less than 100 images, **oversample** to reach 100 samples.
+
+
+## Parameters to Customize
+
+- **Minimum guaranteed samples per category:** e.g., 1  
+- **Minimum fixed number for small categories:** e.g., 100  
+- **Maximum sample cap per category:** e.g., 15,000  
+- **Logarithmic scaling factor \( \alpha \):** e.g., 0.5  
+
+
+## Summary Table
+
+| Tier   | Category Size Range        | Sampling Ratio | Minimum Samples | Maximum Samples |
+|--------|---------------------------|----------------|-----------------|-----------------|
+| Tier 1 | ≥ 100,000                 | 5%             | 1               | 15,000          |
+| Tier 2 | 10,000 to < 100,000       | 20%            | 1               | 15,000          |
+| Tier 3 | 1,000 to < 10,000         | 50%            | 1               | 15,000          |
+| Tier 4 | < 1,000                  | 100% or 100*   | 100*            | 15,000          |
+
 
 This approach generates a more balanced and diverse dataset, which is important in training a strong VQA model that will perform well on all product categories, rather than merely the most frequent ones.
+
+
 
 ## Prompt Engineering for VQA Generation
 
