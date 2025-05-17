@@ -200,7 +200,7 @@ $$
 - **Minimum guaranteed samples per category:** e.g., 1  
 - **Minimum fixed number for small categories:** e.g., 100  
 - **Maximum sample cap per category:** e.g., 15,000  
-- **Logarithmic scaling factor \( \alpha \):** e.g., 0.5  
+- **Logarithmic scaling factor \( alpha \):** e.g., 0.5  
 
 
 ## Summary Table
