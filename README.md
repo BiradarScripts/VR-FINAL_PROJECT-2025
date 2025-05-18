@@ -22,7 +22,7 @@ Here are the essential datasets and resources used in the project:
 |--------------------|--------|
 | 📦 ABO Dataset | [View on Kaggle](https://www.kaggle.com/datasets/aryamanpathak/abo-dataset) |
 | 🧠 Master Train (Images) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-train) |
-| 🧪 Master Test (Images) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/metric-test) |
+| 🧪 Master Test (Images) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-test) |
 | 📊 Master Train (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-traincsv) |
 | 📊 Master Test (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-testcsv) |
 | 🤖 BLIP Fine-Tuned Model Versions | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/blip-finetunedmodel-versions) |
