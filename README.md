@@ -263,6 +263,13 @@ When using fine-tuned BLIP model versions, update the corresponding model paths 
 Where `x` is the version number of the model you want to use.
 
 ---
+## Inference Experiments
+
+Initially, we ran inference with your aryamanpathak/blip-vqa-abo model using standard FP32 precision but with the Key-Value (KV) cache for generation turned OFF. Loading the model this first time took noticeably longer, around 14.79 seconds, and it used about 1.438 GB of GPU memory just to load. During inference, the peak memory reached 1.497 GB, and it took an average of 0.0914 seconds to answer the question "what is color of car" with "red".
+
+Next, we performed inference again using FP32 precision, but this time with the KV cache for generation turned ON (which is the typical default). The model loaded much quicker this time (around 3.20 seconds), using a similar peak of 1.446 GB for loading and 1.498 GB during inference. Interestingly, for this very short answer, the average inference time was slightly higher at 0.1149 seconds with the KV cache enabled. This suggests that for extremely short generations, the overhead of managing the cache might slightly outweigh its benefits, contrary to what's usually seen with longer text generation.
+
+Finally, we tested the model with reduced FP16 precision, keeping the KV cache for generation ON. This approach yielded the most significant improvements. Model loading used only 0.752 GB of GPU memory (almost half of FP32), and peak memory during inference was also much lower at 0.777 GB. Furthermore, the average inference time was the fastest, at just 0.0640 seconds. The answer remained "red", showing that accuracy was maintained for this query while achieving better performance and lower memory usage.
 
 
 ##  Team Members
