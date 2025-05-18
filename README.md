@@ -34,7 +34,61 @@ Here are the essential datasets and resources used in the project:
 Our Visual Question Answering model is hosted on Hugging Face:  
 🔗 [View the model on Hugging Face](https://huggingface.co/aryamanpathak/blip-vqa-abo)
 
+
+### 🤖 Using the Model from Hugging Face
+
+### 📅 Load and Use the Model in Code
+
+You can use the model with just a few lines of Python using `transformers` and `peft`:
+
+```python
+from transformers import BlipProcessor, BlipForQuestionAnswering
+from peft import PeftModel, PeftConfig
+
+# Load PEFT config
+peft_config = PeftConfig.from_pretrained("aryamanpathak/blip-vqa-abo")
+
+# Load base model and adapter
+base_model = BlipForQuestionAnswering.from_pretrained(peft_config.base_model_name_or_path)
+model = PeftModel.from_pretrained(base_model, "aryamanpathak/blip-vqa-abo")
+
+# Load processor
+processor = BlipProcessor.from_pretrained(peft_config.base_model_name_or_path)
+```
+
+### ⚡ Inference Example
+
+```python
+from PIL import Image
+import torch
+
+# Load image and question
+image = Image.open("your_image.jpg").convert("RGB")
+question = "What is in the image?"
+
+# Preprocess inputs
+inputs = processor(image, question, return_tensors="pt")
+inputs = {k: v.to("cuda" if torch.cuda.is_available() else "cpu") for k, v in inputs.items()}
+
+# Move model to device and run inference
+model.to(inputs["input_ids"].device)
+model.eval()
+
+with torch.inference_mode():
+    generated_ids = model.generate(
+        input_ids=inputs["input_ids"],
+        pixel_values=inputs["pixel_values"],
+        attention_mask=inputs.get("attention_mask", None),
+        max_length=20
+    )
+
+# Decode and print answer
+answer = processor.batch_decode(generated_ids, skip_special_tokens=True)[0]
+print("Answer:", answer)
+```
 ---
+
+
 📦 Report(Please dowload for better view of all 46 pages)  
 🔗 [View Report](https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/Vr_report.pdf)
 ---
