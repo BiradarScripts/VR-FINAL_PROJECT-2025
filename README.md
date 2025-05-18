@@ -79,6 +79,23 @@ cd IMT2022529
 pip install -r requirements.txt
 ```
 
+➕ ADD DATA
+
+To add custom data for inference:
+
+Go to the /data directory.
+Drop all your images into this folder.
+Open the metadata.csv file and fill in the following columns for each image:
+image_name – The exact name of the image file (e.g., item01.jpg)
+question – A relevant question for the image
+answer – The expected or annotated answer
+Example row in metadata.csv:
+
+```bash
+image_name,question,answer
+1.jpg,What is the color of the object?,Red
+```
+
 ### ▶️ Run inference:
 
 ```bash
