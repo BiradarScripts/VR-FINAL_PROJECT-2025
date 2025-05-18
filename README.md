@@ -215,12 +215,7 @@ Where `x` is the version number of the model you want to use.
 
 ##  Acknowledgments
 
-This project is undertaken as part of the **[Course Name/Code, e.g., "Multimodal Machine Learning (CS XXXX)"]** course at **[Your University Name]**. We extend our gratitude to the course instructors and teaching assistants for their guidance and the opportunity to work on this exciting project.
+This project is undertaken as part of the **Visual Recognition** course at **International Institute of Information Technology, Bangalore**. We extend our gratitude to the course instructors and teaching assistants for their guidance and the opportunity to work on this exciting project.
 
 ---
 
-##  License
-
-This project is licensed under the **[Choose a License, e.g., MIT License]** - see the `LICENSE` file for details.
-
----
