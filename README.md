@@ -36,7 +36,7 @@ Sure! Here's the **complete README.md code**, including all the text you mention
 ## 📁 Dataset Setup
 
 1. **Download the ABO dataset**  
-   Make sure to download the [ABO dataset](https://huggingface.co/datasets/StanfordVL/ABO) and place it in the **root directory** of this project.
+   Make sure to download the [ABO dataset](https://amazon-berkeley-objects.s3.amazonaws.com/index.html) and place it in the **root directory** of this project.
 
 ---
 
@@ -78,7 +78,7 @@ cd IMT2022529
 ```bash
 pip install -r requirements.txt
 ```
-
+---
 ➕ ADD DATA
 
 To add custom data for inference:
@@ -95,7 +95,7 @@ Example row in metadata.csv:
 image_name,question,answer
 1.jpg,What is the color of the object?,Red
 ```
-
+---
 ### ▶️ Run inference:
 
 ```bash
