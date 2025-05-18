@@ -13,7 +13,7 @@ import time
 from langchain_core.output_parsers import StrOutputParser
 from PIL import Image
 
-# Setup
+
 load_dotenv()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -22,7 +22,6 @@ API_KEY_FILE = "api_key.txt"
 ENV_FILE = ".env"
 CHECKPOINT_FILE = "checkpoint.json"
 
-# Load and set API key
 def load_and_set_api_key():
     with open(API_KEY_FILE, 'r') as f:
         keys = [line.strip() for line in f if line.strip()]
@@ -33,7 +32,7 @@ def load_and_set_api_key():
     genai.configure(api_key=current_key)
     return keys
 
-# Rotate API key
+
 def rotate_api_key():
     with open(API_KEY_FILE, 'r') as f:
         keys = [line.strip() for line in f if line.strip()]
@@ -46,11 +45,11 @@ def rotate_api_key():
     logger.warning("🔁 Rotated API key. Retrying with a new key...")
     load_and_set_api_key()
 
-# Initialize API
+
 load_and_set_api_key()
 llm = genai.GenerativeModel('gemini-2.0-flash')
 
-# Template
+
 generic_template_freshness_detection = '''
 you are a multimodal assistant contributing to a research initiative aimed at building a large-scale, diverse, image-grounded Visual Question Answering (VQA) dataset.
 
@@ -197,7 +196,7 @@ Answer: plastic_cup_of_coffee
 - generate very high quality state of the art Qusetion answer pair,the world needs it,its th eneed of the hour
 '''
 
-# Output parser
+
 parser = StrOutputParser()
 
 def clean_text(text):
@@ -206,10 +205,9 @@ def clean_text(text):
 
 def save_analysis_result(image_id, analysis_data, image_path, output_dir="analyzed_images"):
     try:
-        # Create output directory if it doesn't exist
+
         os.makedirs(output_dir, exist_ok=True)
         
-        # Convert analysis data to JSON string and split into blocks
         raw_data = json.dumps(analysis_data)
         blocks = raw_data.split('\\n\\n')
 
@@ -229,14 +227,13 @@ def save_analysis_result(image_id, analysis_data, image_path, output_dir="analyz
                 except Exception as e:
                     logger.warning(f"⚠️ Skipping block due to error: {block} — {e}")
 
-        # Save analysis data along with image path
+ 
         parsed_file = os.path.join(output_dir, f"{image_id}.json")
         result_data = {
-            "image_path": image_path,  # Add the image path to the result
-            "qa_pairs": qa_list  # Include the Q&A pairs
+            "image_path": image_path,  
+            "qa_pairs": qa_list  
         }
         
-        # Write the result to a JSON file
         with open(parsed_file, 'w') as outfile:
             json.dump(result_data, outfile, indent=2)
 
@@ -246,7 +243,7 @@ def save_analysis_result(image_id, analysis_data, image_path, output_dir="analyz
         logger.error(f"Error parsing and saving result for {image_id}: {e}")
 
 
-# Load image metadata
+
 def load_image_metadata(csv_path):
     try:
         with open(csv_path, 'r', encoding='utf-8') as f:
@@ -256,7 +253,6 @@ def load_image_metadata(csv_path):
         logger.error(f"Error reading metadata file: {e}")
         return {}
 
-# Analyze single image with context
 def analyze_image_with_context(image_path, json_context):
     try:
         with open(image_path, 'rb') as image_file:
@@ -304,7 +300,7 @@ def analyze_image_with_context(image_path, json_context):
         subprocess.run(["python", "final.py"])
         sys.exit(0)
 
-# Load checkpoint
+
 def load_checkpoint():
     if os.path.exists(CHECKPOINT_FILE):
         try:
@@ -314,7 +310,7 @@ def load_checkpoint():
             logger.error(f"Error loading checkpoint: {e}")
     return set()
 
-# Save checkpoint
+
 def save_checkpoint(processed_ids):
     try:
         with open(CHECKPOINT_FILE, 'w', encoding='utf-8') as f:
@@ -322,14 +318,12 @@ def save_checkpoint(processed_ids):
     except Exception as e:
         logger.error(f"Error saving checkpoint: {e}")
 
-# Main processing function
 def process_json_objects(base_folder="part_1", csv_path="abo-images-small/images/metadata/images.csv", output_dir="analyzed_images2"):
     image_metadata = load_image_metadata(csv_path)
     os.makedirs(output_dir, exist_ok=True)
 
     processed_ids = load_checkpoint()
 
-    # Get the subfolders in the base folder in sequential order (lexicographically sorted)
     subfolders = sorted([d for d in os.listdir(base_folder) if os.path.isdir(os.path.join(base_folder, d))])
 
     for subfolder in subfolders:
@@ -341,10 +335,10 @@ def process_json_objects(base_folder="part_1", csv_path="abo-images-small/images
                     try:
                         with open(file_path, 'r', encoding='utf-8') as f:
                             try:
-                                obj = json.load(f)  # Single JSON object per file
+                                obj = json.load(f)  
                             except json.JSONDecodeError as e:
                                 logger.error(f"⚠️ JSON decoding error in {file_path}: {e}")
-                                continue  # skip this file
+                                continue  
 
                         image_ids = obj.get("all_image_id", [])
                         context = {k: v for k, v in obj.items() if k != "all_image_id" and k!='item_weight' and k!='item_dimensions'}
