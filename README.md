@@ -13,6 +13,24 @@ This project leverages the extensive **Amazon Berkeley Objects (ABO)** dataset t
 - 🤖 **End Goal**: Develop a high-performing model capable of understanding visual data and accurately answering related questions.
 
 ---
+
+## 📁 Dataset Resources
+
+Here are the essential datasets and resources used in the project:
+
+| 📌 Dataset / Model | 🔗 Link |
+|--------------------|--------|
+| 📦 ABO Dataset | [View on Kaggle](https://www.kaggle.com/datasets/aryamanpathak/abo-dataset) |
+| 🧠 Master Train (JSON) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-train) |
+| 🧪 Master Test (JSON) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-test) |
+| 📊 Master Train (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-traincsv) |
+| 📊 Master Test (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-testcsv) |
+| 🤖 BLIP Fine-Tuned Model Versions | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/blip-finetunedmodel-versions) |
+
+---
+## 📂 REPORT
+📦 Report  [View Report](https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/Vr_report.pdf)
+---
 ## 📂 Folder Structure
 
 ```bash
@@ -82,25 +100,6 @@ This project leverages the extensive **Amazon Berkeley Objects (ABO)** dataset t
         ├── inference.py
         └── requirements.txt
 ```
----
-
-## 📁 Dataset Resources
-
-Here are the essential datasets and resources used in the project:
-
-| 📌 Dataset / Model | 🔗 Link |
-|--------------------|--------|
-| 📦 ABO Dataset | [View on Kaggle](https://www.kaggle.com/datasets/aryamanpathak/abo-dataset) |
-| 🧠 Master Train (JSON) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-train) |
-| 🧪 Master Test (JSON) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-test) |
-| 📊 Master Train (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-traincsv) |
-| 📊 Master Test (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-testcsv) |
-| 🤖 BLIP Fine-Tuned Model Versions | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/blip-finetunedmodel-versions) |
-
----
-
-Sure! Here's the **complete README.md code**, including all the text you mentioned, properly formatted in Markdown:
-
 
 
 ## 📁 Dataset Setup
