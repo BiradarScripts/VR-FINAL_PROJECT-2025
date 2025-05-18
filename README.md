@@ -1,9 +1,33 @@
-# Multimodal Visual Question Answering with Amazon Berkeley Objects (ABO) Dataset
+# 🧠📷 Multimodal Visual Question Answering with ABO Dataset
 
-## Project Overview
+---
 
-Using the extensive Amazon Berkeley Objects (ABO) dataset, this project focuses on creating a "Multimodal Visual Question Answering" (VQA) system.  We want to use the **Low-Rank Adaptation (LoRA)** method to create a multiple-choice VQA dataset from ABO, establish and evaluate robust baseline models, and significantly enhance their performance by fine-tuning them. The ultimate goal is to build a high-performing VQA model capable of answering questions about visual data, which will be rigorously evaluated on a hidden dataset and an undisclosed metric.
+## 🗂️ Project Overview
 
+This project leverages the extensive **Amazon Berkeley Objects (ABO)** dataset to build a powerful **Multimodal Visual Question Answering (VQA)** system.
+
+### 🔍 Objectives:
+- 🎯 **Dataset Augmentation**: Create a multiple-choice VQA dataset from ABO using **Low-Rank Adaptation (LoRA)**.
+- 🔧 **Baseline Modeling**: Establish robust baseline models and systematically evaluate them.
+- 📈 **Performance Boost**: Fine-tune models to significantly enhance their accuracy and generalization.
+- 🤖 **End Goal**: Develop a high-performing model capable of understanding visual data and accurately answering related questions.
+
+---
+
+## 📁 Dataset Resources
+
+Here are the essential datasets and resources used in the project:
+
+| 📌 Dataset / Model | 🔗 Link |
+|--------------------|--------|
+| 📦 ABO Dataset | [View on Kaggle](https://www.kaggle.com/datasets/aryamanpathak/abo-dataset) |
+| 🧠 Master Train (Images) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-train) |
+| 🧪 Master Test (Images) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/metric-test) |
+| 📊 Master Train (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-traincsv) |
+| 📊 Master Test (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-testcsv) |
+| 🤖 BLIP Fine-Tuned Model Versions | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/blip-finetunedmodel-versions) |
+
+---
 
 ##  Team Members
 
