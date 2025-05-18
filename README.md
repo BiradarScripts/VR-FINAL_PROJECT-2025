@@ -21,13 +21,100 @@ Here are the essential datasets and resources used in the project:
 | 📌 Dataset / Model | 🔗 Link |
 |--------------------|--------|
 | 📦 ABO Dataset | [View on Kaggle](https://www.kaggle.com/datasets/aryamanpathak/abo-dataset) |
-| 🧠 Master Train (Images) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-train) |
-| 🧪 Master Test (Images) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-test) |
+| 🧠 Master Train (JSON) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-train) |
+| 🧪 Master Test (JSON) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-test) |
 | 📊 Master Train (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-traincsv) |
 | 📊 Master Test (CSV) | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/master-testcsv) |
 | 🤖 BLIP Fine-Tuned Model Versions | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/blip-finetunedmodel-versions) |
 
 ---
+
+Sure! Here's the **complete README.md code**, including all the text you mentioned, properly formatted in Markdown:
+
+
+
+## 📁 Dataset Setup
+
+1. **Download the ABO dataset**  
+   Make sure to download the [ABO dataset](https://huggingface.co/datasets/StanfordVL/ABO) and place it in the **root directory** of this project.
+
+---
+
+## 🧹 Data Curation Instructions
+
+### 📂 Navigate to:
+
+```bash
+cd DataCuration/MainCode
+````
+
+### 🔑 Setup API Key:
+
+* Create a file named `api_key.txt` and place all your Gemini API keys inside it.
+* Create a `.env` file in the same directory with the following content:
+
+```env
+GEMINI_API_KEY="PUT YOUR API KEY HERE"
+```
+
+### ▶️ Run the final data curation script:
+
+```bash
+python final.py
+```
+
+---
+
+## 🤖 Inference Instructions
+
+### 📂 Navigate to:
+
+```bash
+cd IMT2022529
+```
+
+### 📦 Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+### ▶️ Run inference:
+
+```bash
+python inference.py --image_dir /path/to/data --csv_path /path/to/data/metadata.csv
+```
+
+Replace `/path/to/...` with the appropriate path on your system. For example:
+
+```bash
+python inference.py --image_dir /Users/biradar/Documents/sem6/inference-setup/data --csv_path /Users/biradar/Documents/sem6/inference-setup/data/metadata.csv
+```
+
+---
+
+## 📓 Running Jupyter Notebooks
+
+To run any `.ipynb` notebook:
+
+* Open the notebook in [Kaggle](https://www.kaggle.com/).
+* Add the necessary dataset links as inputs.
+* Run the cells as usual.
+
+---
+
+## 🧪 Using BLIP Fine-Tuned Model Versions
+
+When using fine-tuned BLIP model versions, update the corresponding model paths to:
+
+```
+/v_x
+```
+
+Where `x` is the version number of the model you want to use.
+
+---
+
 
 ##  Team Members
 
