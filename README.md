@@ -13,6 +13,76 @@ This project leverages the extensive **Amazon Berkeley Objects (ABO)** dataset t
 - 🤖 **End Goal**: Develop a high-performing model capable of understanding visual data and accurately answering related questions.
 
 ---
+## 📂 Folder Structure
+
+```bash
+└── biradarscripts-vr-final_project-2025/
+    ├── README.md
+    ├── BaseLineEvaluation/
+    │   ├── baseline-inference-master-test.ipynb
+    │   ├── Test-inference.ipynb
+    │   └── Result/
+    │       └── BaselineEvaluation.txt
+    ├── DataCuration/
+    │   ├── FinalGeneratedDataSummary/
+    │   │   ├── category_counts.txt
+    │   │   ├── image_id_to_product_type.json
+    │   │   └── plots/
+    │   ├── MainCode/
+    │   │   ├── api_key.txt
+    │   │   ├── final.py
+    │   │   └── prompt.txt
+    │   ├── OriginalDataSummary/
+    │   │   ├── product_type_analysis.txt
+    │   │   └── Plots/
+    │   ├── SubCodes/
+    │   │   ├── analysis.py
+    │   │   ├── distributionProdcutTypeFolder.py
+    │   │   ├── filteringFields.py
+    │   │   ├── image_finder.py
+    │   │   ├── imagetypeMapping.py
+    │   │   ├── jsonFormatters.py
+    │   │   ├── mainScriptTest.py
+    │   │   ├── organized.py
+    │   │   ├── partition.py
+    │   │   ├── primaryFiltering.py
+    │   │   └── sampling.py
+    │   └── Train-Test-Split/
+    ├── EvaluationMetrics/
+    │   ├── evaluation-script/
+    │   │   └── final-evaluation-script.ipynb
+    │   └── Results/
+    │       ├── evaluation_metric_v1.txt
+    │       ├── evaluation_metric_v10.txt
+    │       ├── evaluation_metric_v11.txt
+    │       ├── evaluation_metric_v12.txt
+    │       ├── evaluation_metric_v13.txt
+    │       ├── evaluation_metric_v2.txt
+    │       ├── evaluation_metric_v3.txt
+    │       ├── evaluation_metric_v4.txt
+    │       ├── evaluation_metric_v5.txt
+    │       ├── evaluation_metric_v6.txt
+    │       ├── evaluation_metric_v7.txt
+    │       ├── evaluation_metric_v8.txt
+    │       └── evaluation_metric_v9.txt
+    ├── FineTuningLora/
+    │   ├── blip-final-v1-train-test-2.ipynb
+    │   ├── blip-final-v10-train-test.ipynb
+    │   ├── blip-final-v12-train-test.ipynb
+    │   ├── blip-final-v13-train-test.ipynb
+    │   ├── blip-final-v2-train-test.ipynb
+    │   ├── blip-final-v3-train-test.ipynb
+    │   ├── blip-final-v4-train-test.ipynb
+    │   ├── blip-final-v5-train-tests.ipynb
+    │   ├── blip-final-v6-train-test.ipynb
+    │   ├── blip-final-v7-train-test.ipynb
+    │   ├── blip-final-v8-train-test.ipynb
+    │   └── blip-final-v9-train-test.ipynb
+    └── IMT2022529/
+        ├── inference.py
+        └── requirements.txt
+```
+---
 
 ## 📁 Dataset Resources
 
