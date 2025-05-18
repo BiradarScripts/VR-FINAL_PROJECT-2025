@@ -36,7 +36,7 @@ Sure! Here's the **complete README.md code**, including all the text you mention
 ## 📁 Dataset Setup
 
 1. **Download the ABO dataset**  
-   Make sure to download the [ABO dataset](https://amazon-berkeley-objects.s3.amazonaws.com/index.html) and place it in the **root directory** of this project.
+   Make sure to download the [abo-images-small.tar](https://amazon-berkeley-objects.s3.amazonaws.com/index.html) and place it in the **root directory** of this project.
 
 ---
 
