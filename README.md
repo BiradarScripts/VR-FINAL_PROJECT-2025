@@ -18,40 +18,40 @@ This project leverages the extensive **Amazon Berkeley Objects (ABO)** dataset t
 ```bash
 └── biradarscripts-vr-final_project-2025/
     ├── README.md
-    ├── BaseLineEvaluation/
-    │   ├── baseline-inference-master-test.ipynb
-    │   ├── Test-inference.ipynb
-    │   └── Result/
-    │       └── BaselineEvaluation.txt
-    ├── DataCuration/
-    │   ├── FinalGeneratedDataSummary/
-    │   │   ├── category_counts.txt
-    │   │   ├── image_id_to_product_type.json
-    │   │   └── plots/
-    │   ├── MainCode/
-    │   │   ├── api_key.txt
-    │   │   ├── final.py
-    │   │   └── prompt.txt
-    │   ├── OriginalDataSummary/
-    │   │   ├── product_type_analysis.txt
-    │   │   └── Plots/
-    │   ├── SubCodes/
-    │   │   ├── analysis.py
-    │   │   ├── distributionProdcutTypeFolder.py
-    │   │   ├── filteringFields.py
-    │   │   ├── image_finder.py
-    │   │   ├── imagetypeMapping.py
-    │   │   ├── jsonFormatters.py
-    │   │   ├── mainScriptTest.py
-    │   │   ├── organized.py
-    │   │   ├── partition.py
-    │   │   ├── primaryFiltering.py
-    │   │   └── sampling.py
+    ├── BaseLineEvaluation/                                  
+    │   ├── baseline-inference-master-test.ipynb            #Final inference script for blip-vqa-base 350m
+    │   ├── Test-inference.ipynb                            #test inference script for blip-vqa-base/blip-2(2.7b)/blip-2(3b)/blip-2(11b)/Bakllava/Qwen models
+    │   └── Result/                                           
+    │       └── BaselineEvaluation.txt                      #a .txt file containing the evaluation results for all 15 standard metrics assessed on the BLIP-VQA-base model
+    ├── DataCuration/                                      
+    │   ├── FinalGeneratedDataSummary/                    
+    │   │   ├── category_counts.txt                         #A .txt file showing the detailed analysis of the final generated dataset based on its product_type
+    │   │   ├── image_id_to_product_type.json               #A.json file showing the mapping between product_type and image_id's
+    │   │   └── plots/                                      #This folder contains plots/analysis of 12 groups obtained.
+    │   ├── MainCode/                                      
+    │   │   ├── api_key.txt                                 #A file form where api-keys are extracted 
+    │   │   ├── final.py                                    #the final data generation script
+    │   │   └── prompt.txt                                  #high quality prompt
+    │   ├── OriginalDataSummary/                            
+    │   │   ├── product_type_analysis.txt                   #A .txt file showing the detailed analysis of the original dataset based on its product_type
+    │   │   └── Plots/                                      #This folder contains plots/analysis of 12 groups of initial dataset.
+    │   ├── SubCodes/                                       #Folder containing all the codes used during data proccessing 
+    │   │   ├── analysis.py                                 #script to map product_types to image_id
+    │   │   ├── distributionProdcutTypeFolder.py            #script to distribute the listing files into all the 576 sub-folders/product_types
+    │   │   ├── filteringFields.py                          #script to filter the fields of the listings .json files.removes the non en_US language_tage fields and mixes all_image_id and other_image_id
+    │   │   ├── image_finder.py                             #script to find image using image_id
+    │   │   ├── imagetypeMapping.py                         #script to map product_types to image_id
+    │   │   ├── jsonFormatters.py                           #script that formats the output from the gemini to json object 
+    │   │   ├── mainScriptTest.py                           #a sub-script to test the main script
+    │   │   ├── organized.py                                #a script to divide the dataset into train and test set
+    │   │   ├── partition.py                                # a script that divides the sampled product_types into 3 parts.    
+    │   │   ├── primaryFiltering.py                         # a script to remove the unneccesary fields from metadata
+    │   │   └── sampling.py                                 #Proportional Tiered Sampling Algorithm  script
     │   └── Train-Test-Split/
     ├── EvaluationMetrics/
     │   ├── evaluation-script/
-    │   │   └── final-evaluation-script.ipynb
-    │   └── Results/
+    │   │   └── final-evaluation-script.ipynb               #Final Evaluation Script integrated with 15 evaluation metric to do inference on all the 13 blip-finetuned versions
+    │   └── Results/                                        #A folder containing .txt files containing the evaluation results for all 15 standard metrics assessed on all the 13 finetuned blip versions
     │       ├── evaluation_metric_v1.txt
     │       ├── evaluation_metric_v10.txt
     │       ├── evaluation_metric_v11.txt
@@ -65,7 +65,7 @@ This project leverages the extensive **Amazon Berkeley Objects (ABO)** dataset t
     │       ├── evaluation_metric_v7.txt
     │       ├── evaluation_metric_v8.txt
     │       └── evaluation_metric_v9.txt
-    ├── FineTuningLora/
+    ├── FineTuningLora/                                    #A folder containing all 13 .ipynb scripts used for training and testing of the 13 models
     │   ├── blip-final-v1-train-test-2.ipynb
     │   ├── blip-final-v10-train-test.ipynb
     │   ├── blip-final-v12-train-test.ipynb
@@ -78,7 +78,7 @@ This project leverages the extensive **Amazon Berkeley Objects (ABO)** dataset t
     │   ├── blip-final-v7-train-test.ipynb
     │   ├── blip-final-v8-train-test.ipynb
     │   └── blip-final-v9-train-test.ipynb
-    └── IMT2022529/
+    └── IMT2022529/                                         #submission folder.
         ├── inference.py
         └── requirements.txt
 ```
