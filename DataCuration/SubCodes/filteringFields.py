@@ -4,6 +4,20 @@ import json
 # Define the path to the directory containing JSON files
 directory_path = './abo-listings_filtered/listings/metadata'
 
+def filter_language_entries(obj):
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            obj[key] = filter_language_entries(value)
+        return obj
+    elif isinstance(obj, list):
+        # If list items are dicts with 'language_tag', filter them
+        if all(isinstance(item, dict) and 'language_tag' in item for item in obj):
+            return [item for item in obj if item.get('language_tag') == 'es_US']
+        else:
+            return [filter_language_entries(item) for item in obj]
+    else:
+        return obj
+
 # Iterate over each JSON file in the directory
 for filename in os.listdir(directory_path):
     if filename.endswith('.json'):
@@ -14,25 +28,25 @@ for filename in os.listdir(directory_path):
             data = json.load(f)
         
         # Iterate through each JSON object in the list
-        for obj in data:
+        for i, obj in enumerate(data):
             # Create the unified all_image_id field
             all_image_id = []
             
-            # Add both main_image_id and other_image_id to the list if they exist
             if 'main_image_id' in obj:
                 all_image_id.append(obj['main_image_id'])
             if 'other_image_id' in obj:
-                all_image_id.extend(obj['other_image_id'])  # If it's a list of IDs, merge them
+                all_image_id.extend(obj['other_image_id'])
             
-            # Assign the unified list to all_image_id field
             obj['all_image_id'] = all_image_id
             
-            # Remove the main_image_id and other_image_id fields
             if 'main_image_id' in obj:
                 del obj['main_image_id']
             if 'other_image_id' in obj:
                 del obj['other_image_id']
-        
+
+            # Filter language-tagged list fields
+            data[i] = filter_language_entries(obj)
+
         # Write the updated data back to the file
         with open(file_path, 'w') as f:
             json.dump(data, f, indent=4)
