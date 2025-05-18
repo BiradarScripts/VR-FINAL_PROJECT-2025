@@ -35,7 +35,7 @@ Our Visual Question Answering model is hosted on Hugging Face:
 🔗 [View the model on Hugging Face](https://huggingface.co/aryamanpathak/blip-vqa-abo)
 
 ---
-📦 Report  
+📦 Report(Please dowload for better view of all 46 pages)  
 🔗 [View Report](https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/Vr_report.pdf)
 ---
 
