@@ -28,6 +28,17 @@ Here are the essential datasets and resources used in the project:
 | 🤖 BLIP Fine-Tuned Model Versions | [View on Kaggle](https://www.kaggle.com/datasets/biradar1913/blip-finetunedmodel-versions) |
 
 ---
+
+## 🤗 Model on Hugging Face
+
+Our Visual Question Answering model is hosted on Hugging Face:  
+🔗 [View the model on Hugging Face](https://huggingface.co/aryamanpathak/blip-vqa-abo)
+
+
+
+---
+
+
 📦 Report  [View Report](https://github.com/BiradarScripts/VR-FINAL_PROJECT-2025/blob/main/Vr_report.pdf)
 ---
 ## 📂 Folder Structure
